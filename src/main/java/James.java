@@ -1,4 +1,3 @@
-package ;
 import java.util.Scanner;
 public class James {
     public static void displayList(String[] arr) {
