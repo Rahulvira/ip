@@ -47,6 +47,7 @@ public class James {
         return tasks[taskNo];
     }
 
+
     public static void main(String[] args) {
         Task[] tasks = new Task[100];
         int size = 0;
@@ -58,8 +59,9 @@ public class James {
             System.out.println("input: ");
             String query = input.nextLine().trim();
             System.out.println("--------------------------------------------------------------");
-            if (query.equalsIgnoreCase("bye")) break;
-            if (query.equalsIgnoreCase("list")) {
+            if (query.equalsIgnoreCase("bye")) {
+                break;
+            } else if (query.equalsIgnoreCase("list")) {
                 System.out.print("output:\n");
                 System.out.println("Task count: " + size);
                 James.displayList(tasks);

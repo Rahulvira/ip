@@ -8,6 +8,14 @@ public class Task {
         this.task = t;
     }
 
+    public boolean getStatus() {
+        return this.status;
+    }
+
+    public String getTask() {
+        return this.task;
+    }
+
     /** Sets the task status to false. */
     public void undoTask() {
         this.status = false;
