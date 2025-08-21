@@ -1,3 +1,4 @@
+package ;
 import java.util.Scanner;
 public class James {
     public static void displayList(String[] arr) {
@@ -24,7 +25,7 @@ public class James {
             if (query.equalsIgnoreCase("bye")) break;
             if (query.equalsIgnoreCase("list")) {
                 System.out.print("output:\n");
-                System.out.println("Item count: " + size);
+                System.out.println("Task count: " + size);
                 James.displayList(store);
             } else {
                 System.out.println("output:\n" + "added: " + query);
