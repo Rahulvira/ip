@@ -1,17 +1,54 @@
 import java.util.Scanner;
 public class James {
-    public static void displayList(String[] arr) {
+    /**
+     * Displays the task list in a numbered format line after line.
+     *
+     * @param arr Array containing tasks.
+     */
+    public static void displayList(Task[] arr) {
         int count = 1;
-        for (String str: arr) {
-            if (str != null) {
-                System.out.println("<" + count + "> " + str);
+        for (Task tsk: arr) {
+            if (tsk != null) {
+                System.out.println("<" + count + "> " + tsk.toString());
             }
             count++;
         }
     }
 
+    /**
+     * Checks if the mark or unmark query is valid.
+     *
+     * @param words Array containing the parsed elements of scanned input.
+     * @return Boolean based on query validity.
+     */
+    public static boolean isValidMarkQuery(String[] words) {
+        return (words.length == 2)
+                &&
+                (words[0].equalsIgnoreCase("mark") || words[0].equalsIgnoreCase("unmark"))
+                &&
+                (words[1].matches("^[+-]?\\d+$")); // to check if it is an integer
+    }
+    /**
+     * Checks if the mark or unmark query is valid.
+     *
+     * @param words Array containing the parsed elements of scanned input.
+     * @param tasks Array containing tasks.
+     * @return Boolean based on query validity.
+     */
+    public static Task markTask(String[] words, Task[] tasks) {
+        int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        if (words[0].equalsIgnoreCase("mark")) {
+            System.out.println("marked the following task!");
+            tasks[taskNo].finishTask();
+        } else {
+            System.out.println("unmarked the following task!");
+            tasks[taskNo].undoTask();
+        }
+        return tasks[taskNo];
+    }
+
     public static void main(String[] args) {
-        String[] store = new String[100];
+        Task[] tasks = new Task[100];
         int size = 0;
         Scanner input = new Scanner(System.in);
         System.out.println("Hey There! James at your service. \n" +
@@ -25,10 +62,13 @@ public class James {
             if (query.equalsIgnoreCase("list")) {
                 System.out.print("output:\n");
                 System.out.println("Task count: " + size);
-                James.displayList(store);
+                James.displayList(tasks);
+            } else if(James.isValidMarkQuery(query.split(" "))) {
+                Task editedTask = James.markTask(query.split(" "), tasks);
+                System.out.println(editedTask);
             } else {
                 System.out.println("output:\n" + "added: " + query);
-                store[size] = query;
+                tasks[size] = new Task(query);
                 size++;
             }
             System.out.println("--------------------------------------------------------------");
