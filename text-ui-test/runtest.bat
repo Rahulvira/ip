@@ -15,7 +15,8 @@ IF ERRORLEVEL 1 (
 REM no error here, errorlevel == 0
 
 REM run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
-java -classpath ..\bin Duke < input.txt > ACTUAL.TXT
+java -classpath ..\bin James < input2.txt > ACTUAL.TXT
 
-REM compare the output to the expected output
-FC ACTUAL.TXT EXPECTED.TXT
+REM --- compare output and return a clear code ---
+FC /n /w ACTUAL.TXT EXPECTED.TXT
+

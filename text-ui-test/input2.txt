@@ -1,0 +1,10 @@
+todo email professor
+event annual day /from friday 5pm /to 6pm
+deadline finish homework /by wednesday 3pm
+list
+mark 1
+mark 2
+mark 3
+unmark 3
+list
+bye
