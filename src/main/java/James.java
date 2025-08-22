@@ -1,11 +1,12 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 public class James {
     /**
      * Displays the task list in a numbered format line after line.
      *
      * @param arr Array containing tasks.
      */
-    public static void displayList(Task[] arr) {
+    public static void displayList(ArrayList<Task> arr) {
         int count = 1;
         for (Task tsk: arr) {
             if (tsk != null) {
@@ -30,6 +31,16 @@ public class James {
                 &&
                 (Integer.parseInt(words[1]) <= size);
     }
+
+    public static boolean isValidDeleteQuery(String[] words, int size) {
+        return (words.length == 2)
+                &&
+                (words[0].equalsIgnoreCase("delete"))
+                &&
+                (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
+                &&
+                (Integer.parseInt(words[1]) <= size);
+    }
     /**
      * Checks or unchecks task based on input.
      *
@@ -37,16 +48,24 @@ public class James {
      * @param tasks Array containing tasks.
      * @return Task Updated Task.
      */
-    public static Task markTask(String[] words, Task[] tasks) {
+    public static Task markTask(String[] words, ArrayList<Task> tasks) {
         int taskNo = Integer.parseInt(words[1].trim()) - 1;
         if (words[0].equalsIgnoreCase("mark")) {
             System.out.println("marked the following task!");
-            tasks[taskNo].finishTask();
+            //tasks[taskNo].finishTask();
+            tasks.get(taskNo).finishTask();
         } else {
             System.out.println("unmarked the following task!");
-            tasks[taskNo].undoTask();
+            //tasks[taskNo].undoTask();
+            tasks.get(taskNo).undoTask();
         }
-        return tasks[taskNo];
+        return tasks.get(taskNo);
+    }
+
+    public static Task deleteTask(String[] words, ArrayList<Task> tasks) {
+        int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        System.out.println("deleted the following task!");
+        return tasks.remove(taskNo);
     }
 
     public static void checkQuery(String query, int size) throws JamesException {
@@ -68,18 +87,22 @@ public class James {
             if (splitQuery.length > 1) {
                 throw new JamesException("I can only reply if you just say 'list', sorry! ");
             }
+        } else if (firstWord.equalsIgnoreCase("delete")) {
+            if (splitQuery.length == 1) {
+                throw new JamesException("Please specify which task to delete!");
+            }
         } else if (firstWord.equalsIgnoreCase("mark") || firstWord.equalsIgnoreCase("unmark")) {
             if (!isValidMarkQuery(splitQuery, size)) {
                 throw new JamesException("I can only mark the tasks we have, sorry!");
             }
         } else {
-            throw new JamesException("Sorry, I am not smart enough for this yet!");
+            throw new JamesException("Sorry!, I am not smart enough for this yet!");
         }
     }
 
 
     public static void main(String[] args) throws JamesException {
-        Task[] tasks = new Task[100];
+        ArrayList<Task> tasks = new ArrayList<>(100);
         int size = 0;
         Scanner input = new Scanner(System.in);
         System.out.println("Hey There! James at your service. \n" +
@@ -91,7 +114,6 @@ public class James {
             String query = input.nextLine().trim();
             try {
                 James.checkQuery(query, size);
-
                 System.out.println("--------------------------------------------------------------");
                 if (query.equalsIgnoreCase("bye")) {
                     break;
@@ -102,20 +124,24 @@ public class James {
                 } else if (James.isValidMarkQuery(query.split(" "), size)) {
                     Task editedTask = James.markTask(query.split(" "), tasks);
                     System.out.println(editedTask);
+                } else if (James.isValidDeleteQuery(query.split(" "), size)){
+                    Task deletedTask = James.deleteTask(query.split(" "), tasks);
+                    System.out.println(deletedTask);
+                    size--;
                 } else {
                     if (query.startsWith("todo")) {
-                        tasks[size] = new Todo(query);
-                        System.out.println("output:\n" + "added: " + tasks[size]);
+                        tasks.add(new Todo(query));
+                        System.out.println("output:\n" + "added: " + tasks.get(size));
                         size++;
                         System.out.println("Added as task number " + size);
                     } else if (query.startsWith("event")) {
-                        tasks[size] = new Event(query);
-                        System.out.println("output:\n" + "added: " + tasks[size]);
+                        tasks.add(new Todo(query));
+                        System.out.println("output:\n" + "added: " + tasks.get(size));
                         size++;
                         System.out.println("Added as task number " + size);
                     } else if (query.startsWith("deadline")) {
-                        tasks[size] = new Deadline(query);
-                        System.out.println("output:\n" + "added: " + tasks[size]);
+                        tasks.add(new Todo(query));
+                        System.out.println("output:\n" + "added: " + tasks.get(size));
                         size++;
                         System.out.println("Added as task number " + size);
                     } else {

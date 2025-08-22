@@ -1,0 +1,22 @@
+todo clean the room
+todo clear the shelf
+event Sports day /from saturday 5pm /to 7pm
+random
+todo
+event
+deadline finish homework /by sunday
+deadline
+list
+mark 1
+mark 4
+unmark 4
+unmark 1
+mark 3
+mark 5
+delete 3
+delete 2
+random 2
+surf
+list
+bye
+
