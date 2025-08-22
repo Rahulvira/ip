@@ -69,9 +69,21 @@ public class James {
                 Task editedTask = James.markTask(query.split(" "), tasks);
                 System.out.println(editedTask);
             } else {
-                System.out.println("output:\n" + "added: " + query);
-                tasks[size] = new Task(query);
-                size++;
+                if (query.startsWith("todo")) {
+                    tasks[size] = new Todo(query);
+                    System.out.println("output:\n" + "added: " + tasks[size]);
+                    size++;
+                } else if (query.startsWith("event")) {
+                    tasks[size] = new Event(query);
+                    System.out.println("output:\n" + "added: " + tasks[size]);
+                    size++;
+                } else if (query.startsWith("deadline")) {
+                    tasks[size] = new Deadline(query);
+                    System.out.println("output:\n" + "added: " + tasks[size]);
+                    size++;
+                } else {
+                    System.out.println("invalid query");
+                }
             }
             System.out.println("--------------------------------------------------------------");
         }
