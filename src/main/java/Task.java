@@ -1,4 +1,8 @@
 import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.LocalTime;
 
 enum TaskType {TASK, TODO, DEADLINE, EVENT}
 
@@ -76,6 +80,40 @@ public class Task {
         }
     }
 
+    public String parseDate(String input) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("HHmm");
+        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("h mm a");
+        try {
+            String[] splitInput = input.split(" ");
+            String formattedTime = "";
+            // if time is mentioned parse time
+            if (splitInput.length == 2) {
+                LocalTime time = LocalTime.parse(splitInput[1], inputFormat);
+                formattedTime = time.format(outputFormat);
+            }
+            LocalDate date = LocalDate.parse(splitInput[0], formatter);
+            // will throw exception if no time is specified, so will return original input
+            int day = date.getDayOfMonth();
+            String month = date.getMonth().toString();
+            int year = date.getYear();
+            return "Day " + day + " of " + month + " " + year + " " + formattedTime;
+        } catch (DateTimeParseException e) {
+            return input;
+        }
+    }
+
+    public String parseTime(String input) {
+        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("HHmm");
+        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("h mm a");
+
+        try {
+            LocalTime time = LocalTime.parse(input, inputFormat);
+            return time.format(outputFormat);
+        } catch (DateTimeParseException e) {
+            return input;
+        }
+    }
 
 
     @Override

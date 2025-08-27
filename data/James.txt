@@ -3,3 +3,4 @@ E|1|event Sports day /from saturday 5pm /to 7pm
 T|0|todo clear the shelf
 T|0|todo clean my room
 T|1|todo finish homework
+D|0|deadline finish task /by 2/3/2025 0900
