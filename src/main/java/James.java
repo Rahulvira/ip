@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.ArrayList;
 public class James {
@@ -7,6 +9,7 @@ public class James {
      * @param arr Array containing tasks.
      */
     public static void displayList(ArrayList<Task> arr) {
+        System.out.println(arr);
         int count = 1;
         for (Task tsk: arr) {
             if (tsk != null) {
@@ -95,15 +98,18 @@ public class James {
             if (!isValidMarkQuery(splitQuery, size)) {
                 throw new JamesException("I can only mark the tasks we have, sorry!");
             }
+        } else if (firstWord.equalsIgnoreCase("bye")) {
+            // do nothing
         } else {
             throw new JamesException("Sorry!, I am not smart enough for this yet!");
         }
     }
 
 
-    public static void main(String[] args) throws JamesException {
-        ArrayList<Task> tasks = new ArrayList<>(100);
-        int size = 0;
+    public static void main(String[] args) throws JamesException, IOException {
+        Database db = new Database(Paths.get("data", "james.txt"));
+        ArrayList<Task> tasks = db.load();
+        int size = tasks.size();
         Scanner input = new Scanner(System.in);
         System.out.println("Hey There! James at your service. \n" +
                 "How can I help you today?");
@@ -132,16 +138,19 @@ public class James {
                     if (query.startsWith("todo")) {
                         tasks.add(new Todo(query));
                         System.out.println("output:\n" + "added: " + tasks.get(size));
+                        System.out.println(Task.TaskToString(tasks.get(size)));
                         size++;
                         System.out.println("Added as task number " + size);
                     } else if (query.startsWith("event")) {
-                        tasks.add(new Todo(query));
+                        tasks.add(new Event(query));
                         System.out.println("output:\n" + "added: " + tasks.get(size));
+                        System.out.println(Task.TaskToString(tasks.get(size)));
                         size++;
                         System.out.println("Added as task number " + size);
                     } else if (query.startsWith("deadline")) {
-                        tasks.add(new Todo(query));
+                        tasks.add(new Deadline(query));
                         System.out.println("output:\n" + "added: " + tasks.get(size));
+                        System.out.println(Task.TaskToString(tasks.get(size)));
                         size++;
                         System.out.println("Added as task number " + size);
                     } else {
@@ -156,6 +165,8 @@ public class James {
             }
         }
         System.out.println("Bye, feel free to ask me anything anytime!");
+        // add all tasks to database
+        db.store(tasks);
     }
 }
 

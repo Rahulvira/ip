@@ -6,6 +6,20 @@ public class Deadline extends Task{
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""));
         this.extendedMessage = s;
     }
+    public Deadline(String s, boolean b) {
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
+        this.extendedMessage = s;
+    }
+
+    @Override
+    public String getExtendedMessage() {
+        return this.extendedMessage;
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.DEADLINE;
+    }
 
     public void undoTask() {
         super.undoTask();

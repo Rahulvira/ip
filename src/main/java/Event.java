@@ -7,6 +7,23 @@ public class Event extends Task{
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""));
         this.extendedMessage = s;
     }
+
+    public Event(String s, boolean b) {
+        // Pass only the message to super class, remove event details
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
+        this.extendedMessage = s;
+    }
+
+    @Override
+    public String getExtendedMessage() {
+        return this.extendedMessage;
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.EVENT;
+    }
+
     /** Sets the task status to false. */
     public void undoTask() {
         super.undoTask();

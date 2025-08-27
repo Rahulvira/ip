@@ -1,6 +1,23 @@
 public class Todo extends Task{
+    private String extendedMessage;
     public Todo(String s) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""));
+        this.extendedMessage = s;
+    }
+
+    public Todo(String s, boolean b) {
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
+        this.extendedMessage = s;
+    }
+
+    @Override
+    public String getExtendedMessage() {
+        return this.extendedMessage;
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.TODO;
     }
 
     /** Sets the task status to false. */
