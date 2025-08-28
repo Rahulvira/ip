@@ -3,21 +3,35 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.ArrayList;
 public class James {
+    private Database db;
+    private TaskList tasks;
+    private UI ui;
+
+    public James(String filePath) {
+        ui = new UI();
+        db = new Database(Paths.get(filePath));
+        try {
+            tasks = new TaskList(db.load());
+        } catch (IOException e) {
+            //ui.showLoadingError();
+            tasks = new TaskList();
+        }
+    }
     /**
      * Displays the task list in a numbered format line after line.
      *
      * @param arr Array containing tasks.
      */
-    public static void displayList(ArrayList<Task> arr) {
-        System.out.println(arr);
-        int count = 1;
-        for (Task tsk: arr) {
-            if (tsk != null) {
-                System.out.println("<" + count + "> " + tsk.toString());
-            }
-            count++;
-        }
-    }
+//    public static void displayList(ArrayList<Task> arr) {
+//        System.out.println(arr);
+//        int count = 1;
+//        for (Task tsk: arr) {
+//            if (tsk != null) {
+//                System.out.println("<" + count + "> " + tsk.toString());
+//            }
+//            count++;
+//        }
+//    }
 
     /**
      * Checks if the mark or unmark query is valid.
@@ -105,68 +119,95 @@ public class James {
         }
     }
 
-
-    public static void main(String[] args) throws JamesException, IOException {
-        Database db = new Database(Paths.get("data", "james.txt"));
-        ArrayList<Task> tasks = db.load();
-        int size = tasks.size();
-        Scanner input = new Scanner(System.in);
-        System.out.println("Hey There! James at your service. \n" +
-                "How can I help you today?");
-        System.out.println("--------------------------------------------------------------");
-        while (true) {
-            System.out.println("input: ");
-            if (!input.hasNextLine()) break;
-            String query = input.nextLine().trim();
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
+        while (!isExit) {
             try {
-                James.checkQuery(query, size);
-                System.out.println("--------------------------------------------------------------");
-                if (query.equalsIgnoreCase("bye")) {
-                    break;
-                } else if (query.equalsIgnoreCase("list")) {
-                    System.out.print("output:\n");
-                    System.out.println("Task count: " + size);
-                    James.displayList(tasks);
-                } else if (James.isValidMarkQuery(query.split(" "), size)) {
-                    Task editedTask = James.markTask(query.split(" "), tasks);
-                    System.out.println(editedTask);
-                } else if (James.isValidDeleteQuery(query.split(" "), size)){
-                    Task deletedTask = James.deleteTask(query.split(" "), tasks);
-                    System.out.println(deletedTask);
-                    size--;
-                } else {
-                    if (query.startsWith("todo")) {
-                        tasks.add(new Todo(query));
-                        System.out.println("output:\n" + "added: " + tasks.get(size));
-                        System.out.println(Task.TaskToString(tasks.get(size)));
-                        size++;
-                        System.out.println("Added as task number " + size);
-                    } else if (query.startsWith("event")) {
-                        tasks.add(new Event(query));
-                        System.out.println("output:\n" + "added: " + tasks.get(size));
-                        System.out.println(Task.TaskToString(tasks.get(size)));
-                        size++;
-                        System.out.println("Added as task number " + size);
-                    } else if (query.startsWith("deadline")) {
-                        tasks.add(new Deadline(query));
-                        System.out.println("output:\n" + "added: " + tasks.get(size));
-                        System.out.println(Task.TaskToString(tasks.get(size)));
-                        size++;
-                        System.out.println("Added as task number " + size);
-                    } else {
-                        System.out.println("invalid query");
-                    }
-                }
-                System.out.println("--------------------------------------------------------------");
-            } catch(Exception e) {
-                System.out.println("--------------------------------------------------------------");
-                System.out.println(e.getMessage());
-                System.out.println("--------------------------------------------------------------");
+                String query = ui.readCommand();
+                ui.showLine(); // show the divider line ("_______")
+                String type = Parser.parse(query, tasks.getSize());
+                Parser.execute(type, query, tasks, ui, db);
+                isExit = Parser.isExit();
+            } catch (JamesException e) {
+                ui.showError(e.getMessage());
+            } finally {
+                ui.showLine();
             }
         }
-        System.out.println("Bye, feel free to ask me anything anytime!");
-        // add all tasks to database
-        db.store(tasks);
+    }
+
+
+    public static void main(String[] args) throws JamesException, IOException {
+        new James("data/James.txt").run();
+//        Database db = new Database(Paths.get("data", "james.txt"));
+//        UI ui = new UI();
+//        ArrayList<Task> tasks = db.load();
+//        int size = tasks.size();
+//        // Scanner input = new Scanner(System.in);
+////        System.out.println("Hey There! James at your service. \n" +
+////                "How can I help you today?");
+////        System.out.println("--------------------------------------------------------------");
+//        ui.showWelcome();
+//        ui.showLine();
+//        while (true) {
+//            System.out.println("input: ");
+//            //if (!input.hasNextLine()) break;
+//            String query = ui.readCommand();
+//            try {
+//                James.checkQuery(query, size);
+//                //System.out.println("--------------------------------------------------------------");
+//                ui.showLine();
+//                if (query.equalsIgnoreCase("bye")) {
+//                    break;
+//                } else if (query.equalsIgnoreCase("list")) {
+//                    System.out.print("output:\n");
+//                    System.out.println("Task count: " + size);
+//                    ui.displayList(tasks);
+//                } else if (James.isValidMarkQuery(query.split(" "), size)) {
+//                    Task editedTask = James.markTask(query.split(" "), tasks);
+//                    System.out.println(editedTask);
+//                } else if (James.isValidDeleteQuery(query.split(" "), size)){
+//                    Task deletedTask = James.deleteTask(query.split(" "), tasks);
+//                    System.out.println(deletedTask);
+//                    size--;
+//                } else {
+//                    if (query.startsWith("todo")) {
+//                        tasks.add(new Todo(query));
+//                        System.out.println("output:\n" + "added: " + tasks.get(size));
+//                        System.out.println(Task.TaskToString(tasks.get(size)));
+//                        size++;
+//                        System.out.println("Added as task number " + size);
+//                    } else if (query.startsWith("event")) {
+//                        tasks.add(new Event(query));
+//                        System.out.println("output:\n" + "added: " + tasks.get(size));
+//                        System.out.println(Task.TaskToString(tasks.get(size)));
+//                        size++;
+//                        System.out.println("Added as task number " + size);
+//                    } else if (query.startsWith("deadline")) {
+//                        tasks.add(new Deadline(query));
+//                        System.out.println("output:\n" + "added: " + tasks.get(size));
+//                        System.out.println(Task.TaskToString(tasks.get(size)));
+//                        size++;
+//                        System.out.println("Added as task number " + size);
+//                    } else {
+//                        System.out.println("invalid query");
+//                    }
+//                }
+//                //System.out.println("--------------------------------------------------------------");
+//                ui.showLine();
+//            } catch(Exception e) {
+//                //System.out.println("--------------------------------------------------------------");
+//                ui.showLine();
+//                ui.showError(e.getMessage());
+//                //System.out.println("--------------------------------------------------------------");
+//                ui.showLine();
+//            }
+//        }
+//        //System.out.println("Bye, feel free to ask me anything anytime!");
+//        ui.showBye();
+//        // add all tasks to database
+//        db.store(tasks);
     }
 }
 
