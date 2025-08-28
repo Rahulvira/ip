@@ -1,6 +1,6 @@
+package James;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Parser {
     private static boolean exit;
@@ -105,7 +105,7 @@ public class Parser {
      *
      * @param words Array containing the parsed elements of scanned input.
      * @param tasks Array containing tasks.
-     * @return Task Updated Task.
+     * @return James.Task Updated James.Task.
      */
     public static Task markTask(String[] words, TaskList tasks) {
         int taskNo = Integer.parseInt(words[1].trim()) - 1;
