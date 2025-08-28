@@ -1,3 +1,5 @@
+package James;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 
@@ -37,7 +39,7 @@ public class James {
 
 
     public static void main(String[] args) throws JamesException, IOException {
-        new James("data/James.txt").run();
+        new James("data/James.James.txt").run();
     }
 }
 

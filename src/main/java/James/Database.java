@@ -1,3 +1,5 @@
+package James;
+
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
 import java.io.*;
@@ -40,7 +42,7 @@ public class Database {
 
     public void store(TaskList tasks) throws IOException{
         // loop through tasks, convert tasks to its string representation
-        // to store them in ./data/James.txt
+        // to store them in ./data/James.James.txt
         // use Buffered Writer
         // check if directory and file exists. If not, create it
         handleDirectory();

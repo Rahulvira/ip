@@ -1,3 +1,5 @@
+package James;
+
 public class Todo extends Task{
     private String extendedMessage;
     public Todo(String s) {

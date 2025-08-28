@@ -1,4 +1,4 @@
-Hey There! James at your service.
+Hey There! James.James at your service.
 How can I help you today?
 --------------------------------------------------------------
 input:
@@ -44,7 +44,7 @@ You forgot the task buddy!
 input:
 --------------------------------------------------------------
 output:
-Task count: 4
+James.Task count: 4
 <1> [T] [ ] clean the room
 <2> [T] [ ] clear the shelf
 <3> [T] [ ] Sports day
@@ -100,7 +100,7 @@ Sorry!, I am not smart enough for this yet!
 input:
 --------------------------------------------------------------
 output:
-Task count: 2
+James.Task count: 2
 <1> [T] [ ] clean the room
 <2> [T] [ ] finish homework
 --------------------------------------------------------------
