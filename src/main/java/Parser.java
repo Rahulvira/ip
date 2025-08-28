@@ -79,9 +79,9 @@ public class Parser {
             return "bye";
         } else if (query.equalsIgnoreCase("list")) {
             return "list";
-        } else if (James.isValidMarkQuery(query.split(" "), size)) {
+        } else if (Parser.isValidMarkQuery(query.split(" "), size)) {
             return "mark";
-        } else if (James.isValidDeleteQuery(query.split(" "), size)) {
+        } else if (Parser.isValidDeleteQuery(query.split(" "), size)) {
             return "delete";
         } else {
             if (query.startsWith("todo")) {
