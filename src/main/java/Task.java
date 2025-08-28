@@ -80,7 +80,7 @@ public class Task {
         }
     }
 
-    public String parseDate(String input) {
+    public String parseDateTime(String input) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
         DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("HHmm");
         DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("h mm a");
@@ -98,18 +98,6 @@ public class Task {
             String month = date.getMonth().toString();
             int year = date.getYear();
             return "Day " + day + " of " + month + " " + year + " " + formattedTime;
-        } catch (DateTimeParseException e) {
-            return input;
-        }
-    }
-
-    public String parseTime(String input) {
-        DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("HHmm");
-        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("h mm a");
-
-        try {
-            LocalTime time = LocalTime.parse(input, inputFormat);
-            return time.format(outputFormat);
         } catch (DateTimeParseException e) {
             return input;
         }

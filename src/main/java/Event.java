@@ -52,9 +52,11 @@ public class Event extends Task{
                 .toArray(String[]::new);
 
         String[] eventStartArray = words[1].split(" ", 2);
-        String eventStart = eventStartArray[0]+ ": " + eventStartArray[1];
+        String dateStart = parseDateTime(eventStartArray[1]);
+        String eventStart = eventStartArray[0]+ ": " + dateStart;
         String[] eventEndArray = words[2].split(" ", 2);
-        String eventEnd = (eventEndArray[0] + ": " + eventEndArray[1]);
+        String dateEnd = parseDateTime(eventStartArray[1]);
+        String eventEnd = (eventEndArray[0] + ": " + dateEnd);
         return "(" + eventStart + " " + eventEnd + ")";
     }
     @Override

@@ -46,7 +46,7 @@ public class Deadline extends Task{
                 .map(s -> s == null ? null : s.trim())
                 .toArray(String[]::new);
         String[] deadlineArray = words[1].split(" ", 2);
-        String date = parseDate(deadlineArray[1]);
+        String date = parseDateTime(deadlineArray[1]);
         String deadline = (deadlineArray[0] + ": " + date).trim();
         return "(" + deadline + ")";
     }
