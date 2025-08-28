@@ -38,7 +38,7 @@ public class Database {
         return tasks;
     }
 
-    public void store(ArrayList<Task> tasks) throws IOException{
+    public void store(TaskList tasks) throws IOException{
         // loop through tasks, convert tasks to its string representation
         // to store them in ./data/James.txt
         // use Buffered Writer
@@ -47,7 +47,7 @@ public class Database {
         try (BufferedWriter w = Files.newBufferedWriter(
                 file, UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-            for (Task t : tasks) {
+            for (Task t : tasks.getTasks()) {
                 w.write(Task.TaskToString(t)); w.newLine();
             }
         }
