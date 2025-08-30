@@ -33,7 +33,7 @@ public class Database {
                     // add task to tasks
                     tasks.add(Task.stringToTask(task));
                 } catch (IllegalArgumentException e) {
-                    System.out.println("error in line");
+                    System.out.println(e.getMessage());
                 }
             }
         }

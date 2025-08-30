@@ -48,7 +48,7 @@ public class Task {
         this.status = true;
     }
 
-    public static Task stringToTask(String s) {
+    public static Task stringToTask (String s) throws IllegalArgumentException{
         String[] splitString = s.split("\\|");
         System.out.println(Arrays.toString(splitString));
         if (splitString.length != 3) {
@@ -62,7 +62,7 @@ public class Task {
         } else if (splitString[0].startsWith("E")) {
             return new Event(splitString[2], done);
         } else {
-            return null;
+            throw new IllegalArgumentException("invalid line!");
         }
     }
 

@@ -15,6 +15,7 @@ public class James {
             tasks = new TaskList(db.load());
         } catch (IOException e) {
             //ui.showLoadingError();
+            //System.out.println(e.getMessage());
             tasks = new TaskList();
         }
     }
@@ -39,7 +40,7 @@ public class James {
 
 
     public static void main(String[] args) throws JamesException, IOException {
-        new James("data/James.James.txt").run();
+        new James("data/James.txt").run();
     }
 }
 
