@@ -28,7 +28,7 @@ public class UI {
      * @param arr Array containing tasks.
      */
     public void displayList(TaskList arr) {
-        System.out.println(arr);
+        //System.out.println(arr);
         arr.displayTask();
     }
 

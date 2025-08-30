@@ -125,6 +125,11 @@ public class Parser {
         if (type.equals("bye")) {
             ui.showBye();
             Parser.exit = true;
+            try {
+                db.store(tasks);
+            } catch (IOException e){
+                ui.showError(e.getMessage());
+            }
         } else if (type.equals("list")) {
             ui.displayList(tasks);
         } else if (type.equals("mark")) {
@@ -151,11 +156,6 @@ public class Parser {
             System.out.println("Added as task number " + tasks.getSize());
         } else {
             // you won't come here
-        }
-        try {
-            db.store(tasks);
-        } catch (IOException e){
-            ui.showError(e.getMessage());
         }
     }
 }

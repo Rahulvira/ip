@@ -15,7 +15,7 @@ public class TaskList {
         this.size = 0;
     }
 
-    public void add(Task t) {
+    public void add(Task t){
         tasks.add(t);
         this.size++;
     }
