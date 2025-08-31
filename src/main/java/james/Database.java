@@ -52,9 +52,12 @@ public class Database {
                 try {
                     // convert from string to task
                     // add task to tasks
-                    tasks.add(Task.stringToTask(task));
+                    Task t = Task.stringToTask(task);
+                    tasks.add(t);
                 } catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
+                    //System.out.println(e.getMessage());
+                } finally {
+                    //System.out.println("Loaded task!");
                 }
             }
         }

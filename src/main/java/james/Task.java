@@ -89,10 +89,10 @@ public class Task {
      * @throws IllegalArgumentException if the string format is invalid
      */
     public static Task stringToTask (String s) throws IllegalArgumentException{
-        String[] splitString = s.split("\\|");
-        System.out.println(Arrays.toString(splitString));
+        String[] splitString = s.split("\\|",3);
+        //System.out.println(Arrays.toString(splitString));
         if (splitString.length != 3) {
-            return null;
+            throw new IllegalArgumentException("Invalid Line!");
         }
         boolean isDone = splitString[1].equals("1");
         if (splitString[0].startsWith("T")) {

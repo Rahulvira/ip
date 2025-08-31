@@ -39,11 +39,15 @@ public class Ui {
     /**
      * Displays the task list in a numbered format line after line.
      *
-     * @param arr Array containing tasks.
+     * @param tasks Array containing tasks.
      */
-    public void displayList(TaskList arr) {
+    public void displayList(TaskList tasks) {
         //System.out.println(arr);
-        arr.displayTask();
+        tasks.displayTask();
+    }
+
+    public void displayFilteredList(TaskList tasks, String query) {
+        tasks.displayTasksWithString(query);
     }
 
     /**
