@@ -1,14 +1,14 @@
-package James;
+package james;
 
 import java.util.Scanner;
 
-public class UI {
+public class Ui {
     private Scanner input;
 
     /**
      * Constructs a UI object and initializes the input scanner.
      */
-    public UI() {
+    public Ui() {
         input = new Scanner(System.in);
     }
 

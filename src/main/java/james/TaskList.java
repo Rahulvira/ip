@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import java.util.ArrayList;
 

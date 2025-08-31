@@ -1,9 +1,9 @@
-package James;
+package james;
 
 import java.io.IOException;
 
 public class Parser {
-    private static boolean exit;
+    private static boolean canExit;
     /**
      * Checks if the mark or unmark query is valid.
      *
@@ -116,7 +116,7 @@ public class Parser {
      * Returns whether the program should exit.
      */
     public static boolean isExit() {
-        return Parser.exit;
+        return Parser.canExit;
     }
 
     /**
@@ -149,10 +149,10 @@ public class Parser {
      * @param ui     The UI handler for displaying messages.
      * @param db     The database handler for storing tasks.
      */
-    public static void execute(String type, String query, TaskList tasks, UI ui, Database db) {
+    public static void execute(String type, String query, TaskList tasks, Ui ui, Database db) {
         if (type.equals("bye")) {
             ui.showBye();
-            Parser.exit = true;
+            Parser.canExit = true;
             try {
                 db.store(tasks);
             } catch (IOException e){

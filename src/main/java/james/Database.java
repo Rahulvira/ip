@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;

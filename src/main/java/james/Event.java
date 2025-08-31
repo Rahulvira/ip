@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import java.util.Arrays;
 
@@ -21,9 +21,9 @@ public class Event extends Task{
      *
      * @param s the full event string query
      */
-    public Event(String s, boolean b) {
+    public Event(String s, boolean isMarked) {
         // Pass only the message to super class, remove event details
-        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
         this.extendedMessage = s;
     }
 

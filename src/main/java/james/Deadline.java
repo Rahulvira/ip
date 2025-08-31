@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import java.util.Arrays;
 
@@ -21,12 +21,11 @@ public class Deadline extends Task{
      * Extracts the task description and stores the full message for processing.
      *
      * @param s the full deadline string query
-     * @param b the completion status (true if done, false otherwise)
+     * @param isMarked the completion status (true if done, false otherwise)
      */
-    public Deadline(String s, boolean b) {
-        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
-        this.extendedMessage = s;
-    }
+    public Deadline(String s, boolean isMarked) {
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
+
 
     @Override
     public String getExtendedMessage() {

@@ -1,4 +1,4 @@
-package James;
+package james;
 
 public class Todo extends Task{
     private String extendedMessage;
@@ -16,10 +16,10 @@ public class Todo extends Task{
      * Creates a to-do task from a raw user command with an explicit status.
      *
      * @param s String user input.
-     * @param b Completion status. {@code true} if finished, otherwise {@code false}.
+     * @param isMarked Completion status. {@code true} if finished, otherwise {@code false}.
      */
-    public Todo(String s, boolean b) {
-        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
+    public Todo(String s, boolean isMarked) {
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
         this.extendedMessage = s;
     }
 
