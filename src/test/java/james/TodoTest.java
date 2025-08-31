@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import org.junit.jupiter.api.Test;
 
