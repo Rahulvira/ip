@@ -36,6 +36,13 @@ public class Parser {
                 (Integer.parseInt(words[1]) <= size);
     }
 
+    /**
+     * Checks the validity of a query and throws a JamesException if the query is malformed.
+     *
+     * @param query The full input query string.
+     * @param size  The current number of tasks in the task list.
+     * @throws JamesException if the query is invalid or incomplete.
+     */
     public static void checkQuery(String query, int size) throws JamesException {
         String[] splitQuery = query.split(" ", 2);
         String firstWord = splitQuery[0];
@@ -73,6 +80,15 @@ public class Parser {
             throw new JamesException("Sorry!, I am not smart enough for this yet!");
         }
     }
+
+    /**
+     * Parses the input query and returns the type of command it represents.
+     *
+     * @param query The full input query string.
+     * @param size  The current number of tasks in the task list.
+     * @return A string representing the command type (e.g., "todo", "event", "mark").
+     * @throws JamesException if the query is invalid.
+     */
     public static String parse(String query, int size) throws JamesException {
         Parser.checkQuery(query, size);
         if (query.equalsIgnoreCase("bye")) {
@@ -96,6 +112,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns whether the program should exit.
+     */
     public static boolean isExit() {
         return Parser.exit;
     }
@@ -121,6 +140,15 @@ public class Parser {
         return tasks.get(taskNo);
     }
 
+    /**
+     * Executes the parsed command by interacting with the task list, UI, and database.
+     *
+     * @param type   The type of command to execute.
+     * @param query  The full input query string.
+     * @param tasks  The current list of tasks.
+     * @param ui     The UI handler for displaying messages.
+     * @param db     The database handler for storing tasks.
+     */
     public static void execute(String type, String query, TaskList tasks, UI ui, Database db) {
         if (type.equals("bye")) {
             ui.showBye();

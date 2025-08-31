@@ -3,11 +3,26 @@ package James;
 import java.util.Arrays;
 
 public class Deadline extends Task{
+    /** Full input string query */
     private String extendedMessage;
+
+    /**
+     * Constructs a Deadline object from an input string.
+     * Extracts the task description and stores the full message for processing.
+     *
+     * @param s the full deadline string query
+     */
     public Deadline(String s) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""));
         this.extendedMessage = s;
     }
+    /**
+     * Constructs a Deadline object from an input string.
+     * Extracts the task description and stores the full message for processing.
+     *
+     * @param s the full deadline string query
+     * @param b the completion status (true if done, false otherwise)
+     */
     public Deadline(String s, boolean b) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
         this.extendedMessage = s;
@@ -23,11 +38,12 @@ public class Deadline extends Task{
         return TaskType.DEADLINE;
     }
 
+    @Override
     public void undoTask() {
         super.undoTask();
     }
 
-    /** Sets the task status to true. */
+    @Override
     public void finishTask() {
         super.finishTask();
     }
@@ -42,6 +58,12 @@ public class Deadline extends Task{
         return super.getStatus();
     }
 
+    /**
+     * Extracts and formats the deadline details from the extended message.
+     * Parses the date-time string and returns a readable summary.
+     *
+     * @return formatted deadline details string
+     */
     public String getDeadlineDetails() {
         String[] untrimmedWords = this.extendedMessage.split(" /");
         String[] words = Arrays.stream(untrimmedWords)

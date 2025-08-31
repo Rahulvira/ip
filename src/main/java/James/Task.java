@@ -18,36 +18,76 @@ public class Task {
         this.task = t;
     }
 
+    /**
+     * Constructs a Task with the given message and specified completion status.
+     *
+     * @param t the task description
+     * @param s the completion status (true if done, false otherwise)
+     */
     public Task(String t, boolean s) {
         this.task = t;
         this.status =s;
     }
 
+    /**
+     * Returns an extended message for the task.
+     * Subclasses may override this to include additional metadata.
+     *
+     * @return an extended message string
+     */
     public String getExtendedMessage() {
         return "";
     }
 
+    /**
+     * Returns the type of the task.
+     * Default is TaskType.TASK subclasses override this.
+     *
+     * @return the task type
+     */
     public TaskType getType() {
         return TaskType.TASK;
     }
+
+    /**
+     * Returns the completion status of the task.
+     *
+     * @return true if the task is completed, false otherwise
+     */
     public boolean getStatus() {
         return this.status;
     }
 
+    /**
+     * Returns the textual description of the task.
+     *
+     * @return the task message
+     */
     public String getTask() {
         return this.task;
     }
 
-    /** Sets the task status to false. */
+    /**
+     * Marks the task as not completed.
+     */
     public void undoTask() {
         this.status = false;
     }
 
-    /** Sets the task status to true. */
+    /**
+     * Marks the task as completed.
+     */
     public void finishTask() {
         this.status = true;
     }
 
+    /**
+     * Converts a string representation of a task into a Task object.
+     *
+     * @param s the string to parse
+     * @return the corresponding Task object
+     * @throws IllegalArgumentException if the string format is invalid
+     */
     public static Task stringToTask (String s) throws IllegalArgumentException{
         String[] splitString = s.split("\\|");
         System.out.println(Arrays.toString(splitString));
@@ -66,6 +106,12 @@ public class Task {
         }
     }
 
+    /**
+     * Converts a Task object into its string representation for storage.
+     *
+     * @param t the task to convert
+     * @return the string representation of the task
+     */
     public static String TaskToString(Task t) {
         int done = 0;
         if (t.status) {
@@ -82,6 +128,13 @@ public class Task {
         }
     }
 
+    /**
+     * Parses a date-time string and returns a formatted human-readable version.
+     * Expected input format: {@code "d/M/yyyy HHmm"} or {@code "d/M/yyyy"}.
+     *
+     * @param input the date-time string to parse
+     * @return formatted string or original input if parsing fails
+     */
     public String parseDateTime(String input) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
         DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("HHmm");
