@@ -25,7 +25,7 @@ public class Deadline extends Task{
      */
     public Deadline(String s, boolean isMarked) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
-
+        this.extendedMessage = s;
     }
     @Override
     public String getExtendedMessage() {

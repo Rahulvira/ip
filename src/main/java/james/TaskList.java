@@ -103,7 +103,7 @@ public class TaskList {
             boolean isFound = Stream.of(taskWords)
                                     .anyMatch(item -> item.equalsIgnoreCase(searchItem));
             if (isFound) {
-                System.out.println("<" + i + "> " + task.toString());
+                System.out.println("<" + (i + 1) + "> " + task.toString());
             }
         }
 
