@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -6,10 +6,10 @@ import java.nio.file.Paths;
 public class James {
     private Database db;
     private TaskList tasks;
-    private UI ui;
+    private Ui ui;
 
     public James(String filePath) {
-        ui = new UI();
+        ui = new Ui();
         db = new Database(Paths.get(filePath));
         try {
             tasks = new TaskList(db.load());

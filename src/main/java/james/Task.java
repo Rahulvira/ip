@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import java.util.Arrays;
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ enum TaskType {TASK, TODO, DEADLINE, EVENT}
 
 public class Task {
     /** Status of completion of task */
-    private boolean status;
+    private boolean isMarked;
     /** Message of task */
     private String task;
 
@@ -20,7 +20,7 @@ public class Task {
 
     public Task(String t, boolean s) {
         this.task = t;
-        this.status =s;
+        this.isMarked =s;
     }
 
     public String getExtendedMessage() {
@@ -31,7 +31,7 @@ public class Task {
         return TaskType.TASK;
     }
     public boolean getStatus() {
-        return this.status;
+        return this.isMarked;
     }
 
     public String getTask() {
@@ -40,12 +40,12 @@ public class Task {
 
     /** Sets the task status to false. */
     public void undoTask() {
-        this.status = false;
+        this.isMarked = false;
     }
 
     /** Sets the task status to true. */
     public void finishTask() {
-        this.status = true;
+        this.isMarked = true;
     }
 
     public static Task stringToTask (String s) throws IllegalArgumentException{
@@ -54,13 +54,13 @@ public class Task {
         if (splitString.length != 3) {
             return null;
         }
-        boolean done = splitString[1].equals("1");
+        boolean isDone = splitString[1].equals("1");
         if (splitString[0].startsWith("T")) {
-            return new Todo(splitString[2], done);
+            return new Todo(splitString[2], isDone);
         } else if (splitString[0].startsWith("D")) {
-            return new Deadline(splitString[2], done);
+            return new Deadline(splitString[2], isDone);
         } else if (splitString[0].startsWith("E")) {
-            return new Event(splitString[2], done);
+            return new Event(splitString[2], isDone);
         } else {
             throw new IllegalArgumentException("invalid line!");
         }
@@ -68,7 +68,7 @@ public class Task {
 
     public static String TaskToString(Task t) {
         int done = 0;
-        if (t.status) {
+        if (t.isMarked) {
              done = 1;
         }
         if (t.getType() == TaskType.TODO) {
@@ -108,7 +108,7 @@ public class Task {
 
     @Override
     public String toString() {
-        if (status) {
+        if (isMarked) {
             return "[X] " + task;
         } else {
             return "[ ] " + task;

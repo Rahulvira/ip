@@ -1,4 +1,4 @@
-package James;
+package james;
 
 public class Todo extends Task{
     private String extendedMessage;
@@ -7,8 +7,8 @@ public class Todo extends Task{
         this.extendedMessage = s;
     }
 
-    public Todo(String s, boolean b) {
-        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
+    public Todo(String s, boolean isMarked) {
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
         this.extendedMessage = s;
     }
 

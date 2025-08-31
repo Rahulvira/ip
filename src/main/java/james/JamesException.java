@@ -1,4 +1,4 @@
-package James;
+package james;
 
 public class JamesException extends Exception {
     public JamesException(String message) {

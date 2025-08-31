@@ -1,4 +1,4 @@
-package James;
+package james;
 
 import java.util.Arrays;
 
@@ -8,8 +8,8 @@ public class Deadline extends Task{
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""));
         this.extendedMessage = s;
     }
-    public Deadline(String s, boolean b) {
-        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), b);
+    public Deadline(String s, boolean isMarked) {
+        super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
         this.extendedMessage = s;
     }
 
