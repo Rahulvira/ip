@@ -8,6 +8,12 @@ public class James {
     private TaskList tasks;
     private UI ui;
 
+    /**
+     * Constructs a James chatbot instance with the specified file path for storage.
+     * Initializes the UI, database, and task list. If loading fails, starts with an empty task list.
+     *
+     * @param filePath Path to the file used for persistent task storage.
+     */
     public James(String filePath) {
         ui = new UI();
         db = new Database(Paths.get(filePath));
@@ -20,6 +26,10 @@ public class James {
         }
     }
 
+    /**
+     * Starts the main loop of the application.
+     * Continuously reads user input, parses commands, and executes them until exit is triggered.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
