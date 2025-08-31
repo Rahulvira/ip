@@ -59,6 +59,10 @@ public class Parser {
             if (splitQuery.length > 1) {
                 throw new JamesException("I can only reply if you just say 'list', sorry! ");
             }
+        } else if (firstWord.equalsIgnoreCase("find")) {
+            if (splitQuery.length == 1) {
+                throw new JamesException("please specify what I should find ");
+            }
         } else if (firstWord.equalsIgnoreCase("delete")) {
             if (splitQuery.length == 1) {
                 throw new JamesException("Please specify which task to delete!");
@@ -79,6 +83,8 @@ public class Parser {
             return "bye";
         } else if (query.equalsIgnoreCase("list")) {
             return "list";
+        } else if (query.startsWith("find")) {
+            return "find";
         } else if (Parser.isValidMarkQuery(query.split(" "), size)) {
             return "mark";
         } else if (Parser.isValidDeleteQuery(query.split(" "), size)) {
@@ -132,6 +138,8 @@ public class Parser {
             }
         } else if (type.equals("list")) {
             ui.displayList(tasks);
+        } else if (type.equals("find")) {
+            ui.displayFilteredList(tasks, query);
         } else if (type.equals("mark")) {
             Task editedTask = Parser.markTask(query.split(" "), tasks);
             System.out.println(editedTask);

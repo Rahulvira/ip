@@ -1,6 +1,8 @@
 package James;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class TaskList {
     private ArrayList<Task> tasks;
@@ -46,6 +48,24 @@ public class TaskList {
         return this.tasks.remove(taskNo);
     }
 
+    public void displayTasksWithString(String query) {
+        String searchItem = query.split(" ", 2)[1];
+        //System.out.println(searchItem);
+        for (int i = 0; i < this.size; i++) {
+            Task task = this.tasks.get(i);
+            if (task == null) {
+                continue;
+            }
+            String[] taskWords = task.getTask().split(" ");
+            //System.out.println(Arrays.toString(taskWords));
+            boolean isFound = Stream.of(taskWords)
+                                    .anyMatch(item -> item.equalsIgnoreCase(searchItem));
+            if (isFound) {
+                System.out.println("<" + i + "> " + task.toString());
+            }
+        }
+
+    }
     public int getSize() {
         return this.size;
     }
