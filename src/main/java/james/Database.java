@@ -82,7 +82,7 @@ public class Database {
                 file, UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             for (Task t : tasks.getTasks()) {
-                w.write(Task.TaskToString(t)); w.newLine();
+                w.write(Task.taskToString(t)); w.newLine();
             }
         }
 

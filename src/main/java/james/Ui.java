@@ -1,5 +1,6 @@
 package james;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
@@ -46,8 +47,8 @@ public class Ui {
         tasks.displayTask();
     }
 
-    public void displayFilteredList(TaskList tasks, String query) {
-        tasks.displayTasksWithString(query);
+    public ArrayList<Boolean> displayFilteredList(TaskList tasks, String query) {
+        return tasks.displayTasksWithString(query);
     }
 
     /**
