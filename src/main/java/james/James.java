@@ -48,6 +48,39 @@ public class James {
         }
     }
 
+    /**
+     * Processes a user query by parsing its intent and executing the corresponding command.
+     *
+     * @param query The raw user input string to be interpreted and executed.
+     * @return A JamesResponse object containing either the result of the command execution
+     *         or an error message if the query fails to parse or execute.
+     */
+    public JamesResponse getResponse(String query) {
+        try {
+            String type = Parser.parse(query, tasks.getSize());
+            return Parser.execute(type, query, tasks, ui, db);
+        } catch (JamesException e){
+            return new JamesResponse(e.getMessage());
+        }
+    }
+
+    /**
+     * Retrieves the current list of tasks managed by the system.
+     *
+     * @return The TaskList object containing all tracked tasks.
+     */
+    public TaskList getTasks() {
+        return this.tasks;
+    }
+
+    /**
+     * Provides access to the underlying database for storing tasks.
+     *
+     * @return The Database instance responsible for data storage and retrieval.
+     */
+    public Database getDb() {
+        return this.db;
+    }
 
     public static void main(String[] args) throws JamesException, IOException {
         new James("data/James.txt").run();

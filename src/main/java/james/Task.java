@@ -112,7 +112,7 @@ public class Task {
      * @param t the task to convert
      * @return the string representation of the task
      */
-    public static String TaskToString(Task t) {
+    public static String taskToString(Task t) {
         int done = 0;
         if (t.isMarked) {
              done = 1;

@@ -1,6 +1,10 @@
 package james;
 
+import javafx.application.Platform;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Parser {
     private static boolean canExit;
@@ -147,6 +151,37 @@ public class Parser {
     }
 
     /**
+     * Formats the output message for a newly added task.
+     *
+     * @param task       The task that was added.
+     * @param taskNumber The index or identifier assigned to the task.
+     * @return A formatted string indicating the task addition and its assigned number.
+     */
+    private static String formatTaskOutput(Task task, int taskNumber) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Added: ").append(task).append("\n");
+        sb.append("Added as task number ").append(taskNumber);
+        return sb.toString();
+    }
+
+    /**
+     * Formats the list of tasks for display, filtering only those marked as visible.
+     *
+     * @param t The TaskList containing all tasks.
+     * @param b An ArrayList of booleans indicating which tasks should be shown (true = visible).
+     * @return A formatted string listing all visible tasks with their corresponding indices.
+     */
+    private static String formatListOutput(TaskList t, ArrayList<Boolean> b) {
+        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
+        for (int i = 0; i < t.getSize(); i++) {
+            if (b.get(i)) {
+                sb.append("<").append(i + 1).append("> ").append(t.get(i).toString()).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
      * Executes the parsed command by interacting with the task list, UI, and database.
      *
      * @param type   The type of command to execute.
@@ -155,7 +190,8 @@ public class Parser {
      * @param ui     The UI handler for displaying messages.
      * @param db     The database handler for storing tasks.
      */
-    public static void execute(String type, String query, TaskList tasks, Ui ui, Database db) {
+    public static JamesResponse execute(String type, String query, TaskList tasks, Ui ui, Database db) {
+        ArrayList<Boolean> trueFlags = new ArrayList<>(Collections.nCopies(tasks.getSize(), true));
         if (type.equals("bye")) {
             ui.showBye();
             Parser.canExit = true;
@@ -164,34 +200,34 @@ public class Parser {
             } catch (IOException e){
                 ui.showError(e.getMessage());
             }
+            return new JamesResponse("bye");
         } else if (type.equals("list")) {
             ui.displayList(tasks);
+            return new JamesResponse(formatListOutput(tasks, trueFlags));
         } else if (type.equals("find")) {
-            ui.displayFilteredList(tasks, query);
+            ArrayList<Boolean> flags = ui.displayFilteredList(tasks, query);
+            return new JamesResponse(formatListOutput(tasks, flags));
         } else if (type.equals("mark")) {
             Task editedTask = Parser.markTask(query.split(" "), tasks);
-            System.out.println(editedTask);
+            String action = editedTask.getStatus() ? "unmarked:\n" : "marked:\n";
+            return new JamesResponse("marked: " + editedTask.toString());
         } else if (type.equals("delete")) {
             Task deletedTask = tasks.deleteTask(query);
-            System.out.println(deletedTask);
+            return new JamesResponse("deleted: " + deletedTask.toString());
         } else if (type.equals("todo")) {
-            //add task
-            tasks.add(new Todo(query));
-            System.out.println("output:\n" + "added: " + tasks.get(tasks.getSize() - 1));
-            System.out.println(Task.TaskToString(tasks.get(tasks.getSize() - 1)));
-            System.out.println("Added as task number " + tasks.getSize());
+            Todo newTask = new Todo(query);
+            tasks.add(newTask);
+            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
         } else if (type.equals("event")) {
-            tasks.add(new Event(query));
-            System.out.println("output:\n" + "added: " + tasks.get(tasks.getSize() - 1));
-            System.out.println(Task.TaskToString(tasks.get(tasks.getSize() - 1)));
-            System.out.println("Added as task number " + tasks.getSize());
+            Event newTask = new Event(query);
+            tasks.add(newTask);
+            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
         } else if (type.equals("deadline")) {
-            tasks.add(new Deadline(query));
-            System.out.println("output:\n" + "added: " + tasks.get(tasks.getSize() - 1));
-            System.out.println(Task.TaskToString(tasks.get(tasks.getSize() - 1)));
-            System.out.println("Added as task number " + tasks.getSize());
+            Deadline newTask = new Deadline(query);
+            tasks.add(newTask);
+            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
         } else {
-            // you won't come here
+            return new JamesResponse("invalid");
         }
     }
 }

@@ -62,8 +62,8 @@ public class DatabaseTest {
     @Test
     void load_readsTasksCorrectly() throws IOException {
         List<String> lines = List.of(
-                Task.TaskToString(new Todo("todo eat food")),
-                Task.TaskToString(new Todo("todo water plants", true))
+                Task.taskToString(new Todo("todo eat food")),
+                Task.taskToString(new Todo("todo water plants", true))
         );
         Files.write(tempFile, lines);
 
