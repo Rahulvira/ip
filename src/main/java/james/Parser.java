@@ -146,18 +146,18 @@ public class Parser {
     /**
      * Formats the list of tasks for display, filtering only those marked as visible.
      *
-     * @param t The TaskList containing all tasks.
-     * @param b An ArrayList of booleans indicating which tasks should be shown (true = visible).
+     * @param tasks The TaskList containing all tasks.
+     * @param displayFlags An ArrayList of booleans indicating which tasks should be shown (true = visible).
      * @return A formatted string listing all visible tasks with their corresponding indices.
      */
-    private static String formatListOutput(TaskList t, ArrayList<Boolean> b) {
-        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
-        for (int i = 0; i < t.getSize(); i++) {
-            if (b.get(i)) {
-                sb.append("<").append(i + 1).append("> ").append(t.get(i).toString()).append("\n");
+    private static String formatListOutput(TaskList tasks, ArrayList<Boolean> displayFlags) {
+        StringBuilder listOutput = new StringBuilder("Here are your tasks:\n");
+        for (int i = 0; i < tasks.getSize(); i++) {
+            if (displayFlags.get(i)) {
+                listOutput.append("<").append(i + 1).append("> ").append(tasks.get(i).toString()).append("\n");
             }
         }
-        return sb.toString();
+        return listOutput.toString();
     }
 
     /**
@@ -184,8 +184,8 @@ public class Parser {
             ui.displayList(tasks);
             return new JamesResponse(formatListOutput(tasks, trueFlags));
         } else if (type.equals("find")) {
-            ArrayList<Boolean> flags = ui.displayFilteredList(tasks, query);
-            return new JamesResponse(formatListOutput(tasks, flags));
+            ArrayList<Boolean> displayFlags = tasks.getDisplayFlags(query);
+            return new JamesResponse(formatListOutput(tasks, displayFlags));
         } else if (type.equals("mark")) {
             Task editedTask = tasks.markTask(query);
             String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";

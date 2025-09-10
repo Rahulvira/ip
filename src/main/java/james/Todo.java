@@ -1,7 +1,7 @@
 package james;
 
 public class Todo extends Task{
-    private String extendedMessage;
+    private String extendedQuery;
     /**
      * Creates a to-do task from a raw user command.
      *
@@ -9,7 +9,7 @@ public class Todo extends Task{
      */
     public Todo(String s) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""));
-        this.extendedMessage = s;
+        this.extendedQuery = s;
     }
 
     /**
@@ -20,12 +20,12 @@ public class Todo extends Task{
      */
     public Todo(String s, boolean isMarked) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
-        this.extendedMessage = s;
+        this.extendedQuery = s;
     }
 
     @Override
-    public String getExtendedMessage() {
-        return this.extendedMessage;
+    public String getExtendedQuery() {
+        return this.extendedQuery;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package james;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class TaskList {
@@ -110,9 +109,9 @@ public class TaskList {
      *
      * @param query String containing the search command and keyword.
      */
-    public ArrayList<Boolean> displayTasksWithString(String query) {
+    public ArrayList<Boolean> getDisplayFlags(String query) {
         String searchItem = query.split(" ", 2)[1];
-        ArrayList<Boolean> bools = new ArrayList<>();
+        ArrayList<Boolean> flagsList = new ArrayList<>();
         //System.out.println(searchItem);
         for (int i = 0; i < this.size; i++) {
             Task task = this.tasks.get(i);
@@ -125,12 +124,12 @@ public class TaskList {
                                     .anyMatch(item -> item.equalsIgnoreCase(searchItem));
             if (isFound) {
                 System.out.println("<" + (i + 1) + "> " + task.toString());
-                bools.add(true);
+                flagsList.add(true);
             } else {
-                bools.add(false);
+                flagsList.add(false);
             }
         }
-        return bools;
+        return flagsList;
     }
 
     /**

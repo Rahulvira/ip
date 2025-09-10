@@ -48,7 +48,7 @@ public class Ui {
     }
 
     public ArrayList<Boolean> displayFilteredList(TaskList tasks, String query) {
-        return tasks.displayTasksWithString(query);
+        return tasks.getDisplayFlags(query);
     }
 
     /**

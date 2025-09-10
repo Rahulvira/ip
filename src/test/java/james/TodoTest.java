@@ -11,7 +11,7 @@ public class TodoTest {
     void constructor_setsDescriptionCorrectly() {
         Todo todo = new Todo("todo finish homework");
         assertEquals("finish homework", todo.getTask());
-        assertEquals("todo finish homework", todo.getExtendedMessage());
+        assertEquals("todo finish homework", todo.getExtendedQuery());
         assertEquals(TaskType.TODO, todo.getType());
     }
 
