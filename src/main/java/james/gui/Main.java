@@ -27,7 +27,9 @@ public class Main extends Application {
     public void start(Stage stage) {
         try {
             tasks = james.getTasks();
+            assert tasks != null : "TaskList object must not be null";
             db = james.getDb();
+            assert db != null : "database object must not be null";
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);

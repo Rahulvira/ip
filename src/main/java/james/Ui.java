@@ -25,7 +25,7 @@ public class Ui {
      * Includes a divider line for clarity.
      */
     public void showWelcome() {
-        System.out.println("Hey There! James.James at your service. \n" +
+        System.out.println("Hey There! James at your service. \n" +
                 "How can I help you today?");
         showLine();
     }

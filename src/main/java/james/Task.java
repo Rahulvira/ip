@@ -15,6 +15,7 @@ public class Task {
     private String task;
 
     public Task (String t) {
+        assert t != null : "task creation command cannot be empty";
         this.task = t;
     }
 
@@ -25,6 +26,7 @@ public class Task {
      * @param s the completion status (true if done, false otherwise)
      */
     public Task(String t, boolean s) {
+        assert t != null : "task creation command cannot be empty";
         this.task = t;
         this.isMarked =s;
     }

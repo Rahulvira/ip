@@ -79,9 +79,32 @@ public class TaskList {
     public Task deleteTask(String query) {
         String[] words = query.split(" ");
         int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        assert taskNo != 0 : "Cannot delete 0th task";
         System.out.println("deleted the following task!");
         this.size--;
         return this.tasks.remove(taskNo);
+    }
+
+    /**
+     * Checks or unchecks task based on input.
+     *
+     * @param query String containing the scanned input.
+     * @return James.Task Updated James.Task.
+     */
+    public Task markTask(String query) {
+        String[] words = query.split(" ");
+        int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        assert taskNo != 0 : "Cannot mark 0th task";
+        if (words[0].equalsIgnoreCase("mark")) {
+            System.out.println("marked the following task!");
+            //tasks[taskNo].finishTask();
+            this.tasks.get(taskNo).finishTask();
+        } else {
+            System.out.println("unmarked the following task!");
+            //tasks[taskNo].undoTask();
+            this.tasks.get(taskNo).undoTask();
+        }
+        return this.tasks.get(taskNo);
     }
 
     /**
