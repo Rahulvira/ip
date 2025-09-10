@@ -58,7 +58,7 @@ public class TaskList {
      * Displays all tasks in the list with their corresponding index.
      * Skips null entries if any exist.
      */
-    public void displayTask() {
+    public void displayTasks() {
         int count = 1;
         for (Task tsk: this.tasks) {
             if (tsk != null) {
@@ -104,32 +104,44 @@ public class TaskList {
     }
 
     /**
-     * Displays tasks that contain a specific keyword in their description.
+     * Generates a list of boolean flags indicating which tasks contain a given search term.
      * Assumes the query is in the format "find <searchItem>".
      *
      * @param query String containing the search command and keyword.
+     * @return ArrayList<Boolean> list where each element corresponds to a task and indicates
+     * whether it matches the search keyword
      */
     public ArrayList<Boolean> getDisplayFlags(String query) {
         String searchItem = query.split(" ", 2)[1];
         ArrayList<Boolean> flagsList = new ArrayList<>();
-        //System.out.println(searchItem);
         for (int i = 0; i < this.size; i++) {
             Task task = this.tasks.get(i);
             if (task == null) {
                 continue;
             }
             String[] taskWords = task.getTask().split(" ");
-            //System.out.println(Arrays.toString(taskWords));
             boolean isFound = Stream.of(taskWords)
                                     .anyMatch(item -> item.equalsIgnoreCase(searchItem));
             if (isFound) {
-                System.out.println("<" + (i + 1) + "> " + task.toString());
                 flagsList.add(true);
             } else {
                 flagsList.add(false);
             }
         }
         return flagsList;
+    }
+
+    /**
+     * Displays tasks that contain a specific keyword in their description.
+     *
+     * @param displayFlags ArrayList containing a list of boolean flags
+     */
+    public void displayTasksWithString(ArrayList<Boolean> displayFlags) {
+        for (int i = 0; i < tasks.size(); i++) {
+            if (displayFlags.get(i)) {
+                System.out.println("<" + (i + 1) + "> " + tasks.get(i).toString());
+            }
+        }
     }
 
     /**

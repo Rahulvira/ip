@@ -185,6 +185,7 @@ public class Parser {
             return new JamesResponse(formatListOutput(tasks, trueFlags));
         } else if (type.equals("find")) {
             ArrayList<Boolean> displayFlags = tasks.getDisplayFlags(query);
+            ui.displayFilteredList(tasks, displayFlags);
             return new JamesResponse(formatListOutput(tasks, displayFlags));
         } else if (type.equals("mark")) {
             Task editedTask = tasks.markTask(query);

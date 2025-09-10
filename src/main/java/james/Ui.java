@@ -44,11 +44,11 @@ public class Ui {
      */
     public void displayList(TaskList tasks) {
         //System.out.println(arr);
-        tasks.displayTask();
+        tasks.displayTasks();
     }
 
-    public ArrayList<Boolean> displayFilteredList(TaskList tasks, String query) {
-        return tasks.getDisplayFlags(query);
+    public void displayFilteredList(TaskList tasks, ArrayList<Boolean> displayFlags) {
+        tasks.displayTasksWithString(displayFlags);
     }
 
     /**
