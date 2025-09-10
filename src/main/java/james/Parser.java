@@ -1,7 +1,5 @@
 package james;
 
-import javafx.application.Platform;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
