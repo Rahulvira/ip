@@ -144,23 +144,6 @@ public class Parser {
     }
 
     /**
-     * Formats the list of tasks for display, filtering only those marked as visible.
-     *
-     * @param tasks The TaskList containing all tasks.
-     * @param displayFlags An ArrayList of booleans indicating which tasks should be shown (true = visible).
-     * @return A formatted string listing all visible tasks with their corresponding indices.
-     */
-    private static String formatListOutput(TaskList tasks, ArrayList<Boolean> displayFlags) {
-        StringBuilder listOutput = new StringBuilder("Here are your tasks:\n");
-        for (int i = 0; i < tasks.getSize(); i++) {
-            if (displayFlags.get(i)) {
-                listOutput.append("<").append(i + 1).append("> ").append(tasks.get(i).toString()).append("\n");
-            }
-        }
-        return listOutput.toString();
-    }
-
-    /**
      * Executes the parsed command by interacting with the task list, UI, and database.
      *
      * @param type   The type of command to execute.
@@ -182,11 +165,11 @@ public class Parser {
             return new JamesResponse("bye");
         } else if (type.equals("list")) {
             ui.displayList(tasks);
-            return new JamesResponse(formatListOutput(tasks, trueFlags));
+            return new JamesResponse(tasks.formatAsStringResponse(trueFlags));
         } else if (type.equals("find")) {
             ArrayList<Boolean> displayFlags = tasks.getDisplayFlags(query);
             ui.displayFilteredList(tasks, displayFlags);
-            return new JamesResponse(formatListOutput(tasks, displayFlags));
+            return new JamesResponse(tasks.formatAsStringResponse(displayFlags));
         } else if (type.equals("mark")) {
             Task editedTask = tasks.markTask(query);
             String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";

@@ -145,6 +145,22 @@ public class TaskList {
     }
 
     /**
+     * Formats the list of tasks for display, filtering only those marked as visible.
+     *
+     * @param displayFlags An ArrayList of booleans indicating which tasks should be shown (true = visible).
+     * @return A formatted string listing all visible tasks with their corresponding indices.
+     */
+    public String formatAsStringResponse(ArrayList<Boolean> displayFlags) {
+        StringBuilder listOutput = new StringBuilder("Here are your tasks:\n");
+        for (int i = 0; i < this.tasks.size(); i++) {
+            if (displayFlags.get(i)) {
+                listOutput.append("<").append(i + 1).append("> ").append(this.tasks.get(i).toString()).append("\n");
+            }
+        }
+        return listOutput.toString();
+    }
+
+    /**
      * Returns the current number of tasks in the list.
      *
      * @return Integer representing the size of the task list.
