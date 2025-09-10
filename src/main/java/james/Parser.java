@@ -130,27 +130,6 @@ public class Parser {
     }
 
     /**
-     * Checks or unchecks task based on input.
-     *
-     * @param words Array containing the parsed elements of scanned input.
-     * @param tasks Array containing tasks.
-     * @return James.Task Updated James.Task.
-     */
-    public static Task markTask(String[] words, TaskList tasks) {
-        int taskNo = Integer.parseInt(words[1].trim()) - 1;
-        if (words[0].equalsIgnoreCase("mark")) {
-            System.out.println("marked the following task!");
-            //tasks[taskNo].finishTask();
-            tasks.get(taskNo).finishTask();
-        } else {
-            System.out.println("unmarked the following task!");
-            //tasks[taskNo].undoTask();
-            tasks.get(taskNo).undoTask();
-        }
-        return tasks.get(taskNo);
-    }
-
-    /**
      * Formats the output message for a newly added task.
      *
      * @param task       The task that was added.
@@ -208,9 +187,9 @@ public class Parser {
             ArrayList<Boolean> flags = ui.displayFilteredList(tasks, query);
             return new JamesResponse(formatListOutput(tasks, flags));
         } else if (type.equals("mark")) {
-            Task editedTask = Parser.markTask(query.split(" "), tasks);
-            String action = editedTask.getStatus() ? "unmarked:\n" : "marked:\n";
-            return new JamesResponse("marked: " + editedTask.toString());
+            Task editedTask = tasks.markTask(query);
+            String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
+            return new JamesResponse(action + editedTask.toString());
         } else if (type.equals("delete")) {
             Task deletedTask = tasks.deleteTask(query);
             return new JamesResponse("deleted: " + deletedTask.toString());

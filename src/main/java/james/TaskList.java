@@ -68,6 +68,26 @@ public class TaskList {
             count++;
         }
     }
+    /**
+     * Checks or unchecks task based on input.
+     *
+     * @param query String containing the scanned input.
+     * @return James.Task Updated James.Task.
+     */
+    public Task markTask(String query) {
+        String[] words = query.split(" ");
+        int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        if (words[0].equalsIgnoreCase("mark")) {
+            System.out.println("marked the following task!");
+            //tasks[taskNo].finishTask();
+            tasks.get(taskNo).finishTask();
+        } else {
+            System.out.println("unmarked the following task!");
+            //tasks[taskNo].undoTask();
+            tasks.get(taskNo).undoTask();
+        }
+        return tasks.get(taskNo);
+    }
 
     /**
      * Deletes a task based on the input query string.
