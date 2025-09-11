@@ -22,6 +22,7 @@ public class Database {
      * @param p Path to the file where tasks will be stored and retrieved.
      */
     public Database(Path p) {
+        assert p != null : "path specified should not be null";
         this.file = p;
     };
 

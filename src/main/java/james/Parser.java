@@ -19,7 +19,9 @@ public class Parser {
                 &&
                 (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
                 &&
-                (Integer.parseInt(words[1]) <= size);
+                (Integer.parseInt(words[1]) <= size)
+                &&
+                (!words[1].equals("0"));
     }
 
     /**
@@ -35,7 +37,9 @@ public class Parser {
                 &&
                 (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
                 &&
-                (Integer.parseInt(words[1]) <= size);
+                (Integer.parseInt(words[1]) <= size)
+                &&
+                (!words[1].equals("0"));
     }
 
     /**
@@ -220,6 +224,11 @@ public class Parser {
      * @param db     The database handler for storing tasks.
      */
     public static JamesResponse execute(String type, String query, TaskList tasks, Ui ui, Database db) {
+        assert type != null : "command should be of a specified type";
+        assert query != null : "cannot execute an empty input";
+        assert ui != null : "ui object cannot be null";
+        assert db != null : "db cannot be null";
+        assert tasks != null : "cannot have have a null TaskList object";
         switch (type) {
             case "bye":
                 return handleBye(tasks, ui, db);

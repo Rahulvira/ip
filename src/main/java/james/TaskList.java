@@ -98,10 +98,12 @@ public class TaskList {
     public Task deleteTask(String query) {
         String[] words = query.split(" ");
         int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        assert taskNo != 0 : "Cannot delete 0th task";
         System.out.println("deleted the following task!");
         this.size--;
         return this.tasks.remove(taskNo);
     }
+
 
     /**
      * Generates a list of boolean flags indicating which tasks contain a given search term.
