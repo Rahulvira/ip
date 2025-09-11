@@ -220,44 +220,90 @@ public class Parser {
      * @param db     The database handler for storing tasks.
      */
     public static JamesResponse execute(String type, String query, TaskList tasks, Ui ui, Database db) {
-        ArrayList<Boolean> trueFlags = new ArrayList<>(Collections.nCopies(tasks.getSize(), true));
-        if (type.equals("bye")) {
-            ui.showBye();
-            Parser.canExit = true;
-            try {
-                db.store(tasks);
-            } catch (IOException e){
-                ui.showError(e.getMessage());
-            }
-            return new JamesResponse("bye");
-        } else if (type.equals("list")) {
-            ui.displayList(tasks);
-            return new JamesResponse(tasks.formatAsStringResponse(trueFlags));
-        } else if (type.equals("find")) {
-            ArrayList<Boolean> displayFlags = tasks.getDisplayFlags(query);
-            ui.displayFilteredList(tasks, displayFlags);
-            return new JamesResponse(tasks.formatAsStringResponse(displayFlags));
-        } else if (type.equals("mark")) {
-            Task editedTask = tasks.markTask(query);
-            String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
-            return new JamesResponse(action + editedTask.toString());
-        } else if (type.equals("delete")) {
-            Task deletedTask = tasks.deleteTask(query);
-            return new JamesResponse("deleted: " + deletedTask.toString());
-        } else if (type.equals("todo")) {
-            Todo newTask = new Todo(query);
-            tasks.add(newTask);
-            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
-        } else if (type.equals("event")) {
-            Event newTask = new Event(query);
-            tasks.add(newTask);
-            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
-        } else if (type.equals("deadline")) {
-            Deadline newTask = new Deadline(query);
-            tasks.add(newTask);
-            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
-        } else {
-            return new JamesResponse("invalid command");
+        switch (type) {
+            case "bye":
+                return handleBye(tasks, ui, db);
+
+            case "list":
+                return handleList(tasks, ui);
+
+            case "find":
+                return handleFind(query, tasks, ui);
+
+            case "mark":
+                return handleMark(query, tasks);
+
+            case "delete":
+                return handleDelete(query, tasks);
+
+            case "todo":
+                return handleTaskCreation(new Todo(query), tasks);
+
+            case "event":
+                return handleTaskCreation(new Event(query), tasks);
+
+            case "deadline":
+                return handleTaskCreation(new Deadline(query), tasks);
+
+            default:
+                return new JamesResponse("invalid command");
         }
+    }
+
+    /**
+     * Handles the "bye" command by saving tasks, showing a farewell, and preparing exit.
+     */
+    private static JamesResponse handleBye(TaskList tasks, Ui ui, Database db) {
+        ui.showBye();
+        Parser.canExit = true;
+        try {
+            db.store(tasks);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
+        }
+        return new JamesResponse("bye");
+    }
+
+    /**
+     * Handles the "list" command by displaying and returning the full task list.
+     */
+    private static JamesResponse handleList(TaskList tasks, Ui ui) {
+        ArrayList<Boolean> flags = new ArrayList<>(Collections.nCopies(tasks.getSize(), true));
+        ui.displayList(tasks);
+        return new JamesResponse(tasks.formatAsStringResponse(flags));
+    }
+
+    /**
+     * Handles the "find" command by filtering tasks based on the query.
+     */
+    private static JamesResponse handleFind(String query, TaskList tasks, Ui ui) {
+        ArrayList<Boolean> displayFlags = tasks.getDisplayFlags(query);
+        ui.displayFilteredList(tasks, displayFlags);
+        return new JamesResponse(tasks.formatAsStringResponse(displayFlags));
+    }
+
+    /**
+     * Handles the "mark"/"unmark" command by updating the task's status.
+     */
+    private static JamesResponse handleMark(String query, TaskList tasks) {
+        Task editedTask = tasks.markTask(query);
+        String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
+        return new JamesResponse(action + editedTask);
+    }
+
+    /**
+     * Handles the "delete" command by removing a task from the task list.
+     */
+    private static JamesResponse handleDelete(String query, TaskList tasks) {
+        Task deletedTask = tasks.deleteTask(query);
+        return new JamesResponse("deleted: " + deletedTask);
+    }
+
+    /**
+     * Handles task creation for "todo", "event", and "deadline" commands.
+     */
+    private static JamesResponse handleTaskCreation(Task newTask, TaskList tasks) {
+        tasks.add(newTask);
+        return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
     }
 }
