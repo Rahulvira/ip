@@ -1,7 +1,5 @@
 package james;
 
-import javafx.application.Platform;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,84 +43,153 @@ public class Parser {
     }
 
     /**
-     * Checks the validity of a query and throws a JamesException if the query is malformed.
+     * Parses the input query, validates it, and returns the type of command it represents.
      *
-     * @param query The full input query string.
+     * This method is the single entry point for both command identification and query validation.
+     * It ensures the query adheres to the expected format and throws a {@link JamesException}
+     * if the input is malformed or incomplete.
+     *
+     * @param query The full input query string provided by the user.
      * @param size  The current number of tasks in the task list.
+     * @return A lowercase string representing the command type (e.g., "todo", "event", "mark").
      * @throws JamesException if the query is invalid or incomplete.
      */
-    public static void checkQuery(String query, int size) throws JamesException {
-        String[] splitQuery = query.split(" ", 2);
-        String firstWord = splitQuery[0];
-        if (firstWord.equalsIgnoreCase("todo")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("You forgot the task buddy!");
-            }
-        } else if (firstWord.equalsIgnoreCase("event")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("You forgot the task buddy!");
-            } else if (splitQuery[1].split(" /").length < 3) {
-                throw new JamesException("event query incomplete!");
-            }
-        } else if (firstWord.equalsIgnoreCase("deadline")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("You forgot the task buddy!");
-            } else if (splitQuery[1].split(" /").length < 2) {
-                throw new JamesException("deadline query incomplete!");
-            }
-        } else if (firstWord.equalsIgnoreCase("list")) {
-            if (splitQuery.length > 1) {
-                throw new JamesException("I can only reply if you just say 'list', sorry! ");
-            }
-        } else if (firstWord.equalsIgnoreCase("find")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("please specify what I should find ");
-            }
-        } else if (firstWord.equalsIgnoreCase("delete")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("Please specify which task to delete!");
-            }
-        } else if (firstWord.equalsIgnoreCase("mark") || firstWord.equalsIgnoreCase("unmark")) {
-            if (!isValidMarkQuery(splitQuery, size)) {
-                throw new JamesException("I can only mark the tasks we have, sorry!");
-            }
-        } else if (firstWord.equalsIgnoreCase("bye")) {
-            // do nothing
-        } else {
-            throw new JamesException("Sorry!, I am not smart enough for this yet!");
+    public static String parse(String query, int size) throws JamesException {
+        String[] splitQuery = query.trim().split(" ", 2);
+        String command = splitQuery[0].toLowerCase();
+
+        switch (command) {
+            case "bye":
+                return "bye";
+
+            case "list":
+                validateList(splitQuery);
+                return "list";
+
+            case "find":
+                validateFind(splitQuery);
+                return "find";
+
+            case "todo":
+                validateTodo(splitQuery);
+                return "todo";
+
+            case "event":
+                validateEvent(splitQuery);
+                return "event";
+
+            case "deadline":
+                validateDeadline(splitQuery);
+                return "deadline";
+
+            case "delete":
+                validateDelete(splitQuery, size);
+                return "delete";
+
+            case "mark":
+            case "unmark":
+                validateMark(splitQuery, size);
+                return "mark";
+
+            default:
+                throw new JamesException("Sorry! I am not smart enough for this yet!");
         }
     }
 
     /**
-     * Parses the input query and returns the type of command it represents.
+     * Validates a "todo" command query.
      *
-     * @param query The full input query string.
-     * @param size  The current number of tasks in the task list.
-     * @return A string representing the command type (e.g., "todo", "event", "mark").
-     * @throws JamesException if the query is invalid.
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no description is provided.
      */
-    public static String parse(String query, int size) throws JamesException {
-        Parser.checkQuery(query, size);
-        if (query.equalsIgnoreCase("bye")) {
-            return "bye";
-        } else if (query.equalsIgnoreCase("list")) {
-            return "list";
-        } else if (query.startsWith("find")) {
-            return "find";
-        } else if (Parser.isValidMarkQuery(query.split(" "), size)) {
-            return "mark";
-        } else if (Parser.isValidDeleteQuery(query.split(" "), size)) {
-            return "delete";
-        } else {
-            if (query.startsWith("todo")) {
-                return "todo";
-            } else if (query.startsWith("event")) {
-                return "event";
-            } else if (query.startsWith("deadline")) {
-                return "deadline";
-            } else {
-                return "invalid";
-            }
+    private static void validateTodo(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("You forgot the task buddy!");
+        }
+    }
+
+    /**
+     * Validates an "event" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no description is provided or if the event details
+     *                        (description, /at, and date/time) are incomplete.
+     */
+    private static void validateEvent(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("You forgot the task buddy!");
+        }
+        if (splitQuery[1].split(" /").length < 3) {
+            throw new JamesException("Event query incomplete!");
+        }
+    }
+
+    /**
+     * Validates a "deadline" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no description is provided or if the deadline details
+     *                        (description and /by) are incomplete.
+     */
+    private static void validateDeadline(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("You forgot the task buddy!");
+        }
+        if (splitQuery[1].split(" /").length < 2) {
+            throw new JamesException("Deadline query incomplete!");
+        }
+    }
+
+    /**
+     * Validates a "list" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if additional arguments are provided with the "list" command.
+     */
+    private static void validateList(String[] splitQuery) throws JamesException {
+        if (splitQuery.length > 1) {
+            throw new JamesException("I can only reply if you just say 'list', sorry!");
+        }
+    }
+
+    /**
+     * Validates a "find" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no keyword is provided to search for.
+     */
+    private static void validateFind(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("Please specify what I should find");
+        }
+    }
+
+    /**
+     * Validates a "delete" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @param size       The current number of tasks in the task list.
+     * @throws JamesException if no task index is provided or if the index is invalid.
+     */
+    private static void validateDelete(String[] splitQuery, int size) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("Please specify which task to delete!");
+        }
+        if (!Parser.isValidDeleteQuery(splitQuery, size)) {
+            throw new JamesException("Invalid delete query!");
+        }
+    }
+
+    /**
+     * Validates a "mark" or "unmark" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @param size       The current number of tasks in the task list.
+     * @throws JamesException if the index provided does not match a valid task.
+     */
+    private static void validateMark(String[] splitQuery, int size) throws JamesException {
+        if (!Parser.isValidMarkQuery(splitQuery, size)) {
+            throw new JamesException("I can only mark the tasks we have, sorry!");
         }
     }
 
@@ -131,28 +198,6 @@ public class Parser {
      */
     public static boolean isExit() {
         return Parser.canExit;
-    }
-
-    /**
-     * Checks or unchecks task based on input.
-     *
-     * @param words Array containing the parsed elements of scanned input.
-     * @param tasks Array containing tasks.
-     * @return James.Task Updated James.Task.
-     */
-    public static Task markTask(String[] words, TaskList tasks) {
-        int taskNo = Integer.parseInt(words[1].trim()) - 1;
-        assert taskNo != 0 : "Cannot mark 0th task";
-        if (words[0].equalsIgnoreCase("mark")) {
-            System.out.println("marked the following task!");
-            //tasks[taskNo].finishTask();
-            tasks.get(taskNo).finishTask();
-        } else {
-            System.out.println("unmarked the following task!");
-            //tasks[taskNo].undoTask();
-            tasks.get(taskNo).undoTask();
-        }
-        return tasks.get(taskNo);
     }
 
     /**
@@ -166,23 +211,6 @@ public class Parser {
         StringBuilder sb = new StringBuilder();
         sb.append("Added: ").append(task).append("\n");
         sb.append("Added as task number ").append(taskNumber);
-        return sb.toString();
-    }
-
-    /**
-     * Formats the list of tasks for display, filtering only those marked as visible.
-     *
-     * @param t The TaskList containing all tasks.
-     * @param b An ArrayList of booleans indicating which tasks should be shown (true = visible).
-     * @return A formatted string listing all visible tasks with their corresponding indices.
-     */
-    private static String formatListOutput(TaskList t, ArrayList<Boolean> b) {
-        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
-        for (int i = 0; i < t.getSize(); i++) {
-            if (b.get(i)) {
-                sb.append("<").append(i + 1).append("> ").append(t.get(i).toString()).append("\n");
-            }
-        }
         return sb.toString();
     }
 
@@ -201,44 +229,90 @@ public class Parser {
         assert ui != null : "ui object cannot be null";
         assert db != null : "db cannot be null";
         assert tasks != null : "cannot have have a null TaskList object";
-        ArrayList<Boolean> trueFlags = new ArrayList<>(Collections.nCopies(tasks.getSize(), true));
-        if (type.equals("bye")) {
-            ui.showBye();
-            Parser.canExit = true;
-            try {
-                db.store(tasks);
-            } catch (IOException e){
-                ui.showError(e.getMessage());
-            }
-            return new JamesResponse("bye");
-        } else if (type.equals("list")) {
-            ui.displayList(tasks);
-            return new JamesResponse(formatListOutput(tasks, trueFlags));
-        } else if (type.equals("find")) {
-            ArrayList<Boolean> flags = ui.displayFilteredList(tasks, query);
-            return new JamesResponse(formatListOutput(tasks, flags));
-        } else if (type.equals("mark")) {
-            Task editedTask = tasks.markTask(query);
-            String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
-            return new JamesResponse(action + editedTask.toString());
-        } else if (type.equals("delete")) {
-            Task deletedTask = tasks.deleteTask(query);
-            return new JamesResponse("deleted: " + deletedTask.toString());
-        } else if (type.equals("todo")) {
-            Todo newTask = new Todo(query);
-            tasks.add(newTask);
-            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
-        } else if (type.equals("event")) {
-            Event newTask = new Event(query);
-            tasks.add(newTask);
-            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
-        } else if (type.equals("deadline")) {
-            Deadline newTask = new Deadline(query);
-            tasks.add(newTask);
-            return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
-        } else {
-            assert false: "unreachable code, bug in parser";
-            return new JamesResponse("invalid");
+        switch (type) {
+            case "bye":
+                return handleBye(tasks, ui, db);
+
+            case "list":
+                return handleList(tasks, ui);
+
+            case "find":
+                return handleFind(query, tasks, ui);
+
+            case "mark":
+                return handleMark(query, tasks);
+
+            case "delete":
+                return handleDelete(query, tasks);
+
+            case "todo":
+                return handleTaskCreation(new Todo(query), tasks);
+
+            case "event":
+                return handleTaskCreation(new Event(query), tasks);
+
+            case "deadline":
+                return handleTaskCreation(new Deadline(query), tasks);
+
+            default:
+                return new JamesResponse("invalid command");
         }
+    }
+
+    /**
+     * Handles the "bye" command by saving tasks, showing a farewell, and preparing exit.
+     */
+    private static JamesResponse handleBye(TaskList tasks, Ui ui, Database db) {
+        ui.showBye();
+        Parser.canExit = true;
+        try {
+            db.store(tasks);
+        } catch (IOException e) {
+            ui.showError(e.getMessage());
+        }
+        return new JamesResponse("bye");
+    }
+
+    /**
+     * Handles the "list" command by displaying and returning the full task list.
+     */
+    private static JamesResponse handleList(TaskList tasks, Ui ui) {
+        ArrayList<Boolean> flags = new ArrayList<>(Collections.nCopies(tasks.getSize(), true));
+        ui.displayList(tasks);
+        return new JamesResponse(tasks.formatAsStringResponse(flags));
+    }
+
+    /**
+     * Handles the "find" command by filtering tasks based on the query.
+     */
+    private static JamesResponse handleFind(String query, TaskList tasks, Ui ui) {
+        ArrayList<Boolean> displayFlags = tasks.getDisplayFlags(query);
+        ui.displayFilteredList(tasks, displayFlags);
+        return new JamesResponse(tasks.formatAsStringResponse(displayFlags));
+    }
+
+    /**
+     * Handles the "mark"/"unmark" command by updating the task's status.
+     */
+    private static JamesResponse handleMark(String query, TaskList tasks) {
+        Task editedTask = tasks.markTask(query);
+        String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
+        return new JamesResponse(action + editedTask);
+    }
+
+    /**
+     * Handles the "delete" command by removing a task from the task list.
+     */
+    private static JamesResponse handleDelete(String query, TaskList tasks) {
+        Task deletedTask = tasks.deleteTask(query);
+        return new JamesResponse("deleted: " + deletedTask);
+    }
+
+    /**
+     * Handles task creation for "todo", "event", and "deadline" commands.
+     */
+    private static JamesResponse handleTaskCreation(Task newTask, TaskList tasks) {
+        tasks.add(newTask);
+        return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
     }
 }

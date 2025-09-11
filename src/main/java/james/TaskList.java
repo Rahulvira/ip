@@ -1,7 +1,6 @@
 package james;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class TaskList {
@@ -59,7 +58,7 @@ public class TaskList {
      * Displays all tasks in the list with their corresponding index.
      * Skips null entries if any exist.
      */
-    public void displayTask() {
+    public void displayTasks() {
         int count = 1;
         for (Task tsk: this.tasks) {
             if (tsk != null) {
@@ -67,6 +66,26 @@ public class TaskList {
             }
             count++;
         }
+    }
+    /**
+     * Checks or unchecks task based on input.
+     *
+     * @param query String containing the scanned input.
+     * @return James.Task Updated James.Task.
+     */
+    public Task markTask(String query) {
+        String[] words = query.split(" ");
+        int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        if (words[0].equalsIgnoreCase("mark")) {
+            System.out.println("marked the following task!");
+            //tasks[taskNo].finishTask();
+            tasks.get(taskNo).finishTask();
+        } else {
+            System.out.println("unmarked the following task!");
+            //tasks[taskNo].undoTask();
+            tasks.get(taskNo).undoTask();
+        }
+        return tasks.get(taskNo);
     }
 
     /**
@@ -85,55 +104,62 @@ public class TaskList {
         return this.tasks.remove(taskNo);
     }
 
-    /**
-     * Checks or unchecks task based on input.
-     *
-     * @param query String containing the scanned input.
-     * @return James.Task Updated James.Task.
-     */
-    public Task markTask(String query) {
-        String[] words = query.split(" ");
-        int taskNo = Integer.parseInt(words[1].trim()) - 1;
-        assert taskNo != 0 : "Cannot mark 0th task";
-        if (words[0].equalsIgnoreCase("mark")) {
-            System.out.println("marked the following task!");
-            //tasks[taskNo].finishTask();
-            this.tasks.get(taskNo).finishTask();
-        } else {
-            System.out.println("unmarked the following task!");
-            //tasks[taskNo].undoTask();
-            this.tasks.get(taskNo).undoTask();
-        }
-        return this.tasks.get(taskNo);
-    }
 
     /**
-     * Displays tasks that contain a specific keyword in their description.
+     * Generates a list of boolean flags indicating which tasks contain a given search term.
      * Assumes the query is in the format "find <searchItem>".
      *
      * @param query String containing the search command and keyword.
+     * @return ArrayList<Boolean> list where each element corresponds to a task and indicates
+     * whether it matches the search keyword
      */
-    public ArrayList<Boolean> displayTasksWithString(String query) {
+    public ArrayList<Boolean> getDisplayFlags(String query) {
         String searchItem = query.split(" ", 2)[1];
-        ArrayList<Boolean> bools = new ArrayList<>();
-        //System.out.println(searchItem);
+        ArrayList<Boolean> flagsList = new ArrayList<>();
         for (int i = 0; i < this.size; i++) {
             Task task = this.tasks.get(i);
             if (task == null) {
                 continue;
             }
             String[] taskWords = task.getTask().split(" ");
-            //System.out.println(Arrays.toString(taskWords));
             boolean isFound = Stream.of(taskWords)
                                     .anyMatch(item -> item.equalsIgnoreCase(searchItem));
             if (isFound) {
-                System.out.println("<" + (i + 1) + "> " + task.toString());
-                bools.add(true);
+                flagsList.add(true);
             } else {
-                bools.add(false);
+                flagsList.add(false);
             }
         }
-        return bools;
+        return flagsList;
+    }
+
+    /**
+     * Displays tasks that contain a specific keyword in their description.
+     *
+     * @param displayFlags ArrayList containing a list of boolean flags
+     */
+    public void displayTasksWithString(ArrayList<Boolean> displayFlags) {
+        for (int i = 0; i < tasks.size(); i++) {
+            if (displayFlags.get(i)) {
+                System.out.println("<" + (i + 1) + "> " + tasks.get(i).toString());
+            }
+        }
+    }
+
+    /**
+     * Formats the list of tasks for display, filtering only those marked as visible.
+     *
+     * @param displayFlags An ArrayList of booleans indicating which tasks should be shown (true = visible).
+     * @return A formatted string listing all visible tasks with their corresponding indices.
+     */
+    public String formatAsStringResponse(ArrayList<Boolean> displayFlags) {
+        StringBuilder listOutput = new StringBuilder("Here are your tasks:\n");
+        for (int i = 0; i < this.tasks.size(); i++) {
+            if (displayFlags.get(i)) {
+                listOutput.append("<").append(i + 1).append("> ").append(this.tasks.get(i).toString()).append("\n");
+            }
+        }
+        return listOutput.toString();
     }
 
     /**

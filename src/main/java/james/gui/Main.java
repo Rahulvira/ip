@@ -1,12 +1,8 @@
 package james.gui;
 
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-
 import james.Database;
 import james.James;
-import james.Task;
 import james.TaskList;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

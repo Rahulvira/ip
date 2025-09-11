@@ -1,6 +1,5 @@
 package james;
 
-import java.util.Arrays;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -37,7 +36,7 @@ public class Task {
      *
      * @return an extended message string
      */
-    public String getExtendedMessage() {
+    public String getExtendedQuery() {
         return "";
     }
 
@@ -120,11 +119,11 @@ public class Task {
              done = 1;
         }
         if (t.getType() == TaskType.TODO) {
-            return "T|" + done + "|" + t.getExtendedMessage();
+            return "T|" + done + "|" + t.getExtendedQuery();
         } else if (t.getType() == TaskType.DEADLINE) {
-            return "D|" + done + "|" + t.getExtendedMessage();
+            return "D|" + done + "|" + t.getExtendedQuery();
         } else if (t.getType() == TaskType.EVENT) {
-            return "E|" + done + "|" + t.getExtendedMessage();
+            return "E|" + done + "|" + t.getExtendedQuery();
         } else {
             return "";
         }

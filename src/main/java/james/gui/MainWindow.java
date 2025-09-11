@@ -2,7 +2,6 @@ package james.gui;
 
 import james.James;
 import james.JamesResponse;
-import james.Task;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

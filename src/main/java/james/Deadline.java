@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Deadline extends Task{
     /** Full input string query */
-    private String extendedMessage;
+    private String extendedQuery;
 
     /**
      * Constructs a Deadline object from an input string.
@@ -14,7 +14,7 @@ public class Deadline extends Task{
      */
     public Deadline(String s) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""));
-        this.extendedMessage = s;
+        this.extendedQuery = s;
     }
     /**
      * Constructs a Deadline object from an input string.
@@ -25,11 +25,11 @@ public class Deadline extends Task{
      */
     public Deadline(String s, boolean isMarked) {
         super(s.split(" /")[0].replaceFirst("^\\s*\\S+\\s*", ""), isMarked);
-        this.extendedMessage = s;
+        this.extendedQuery = s;
     }
     @Override
-    public String getExtendedMessage() {
-        return this.extendedMessage;
+    public String getExtendedQuery() {
+        return this.extendedQuery;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Deadline extends Task{
      * @return formatted deadline details string
      */
     public String getDeadlineDetails() {
-        String[] untrimmedWords = this.extendedMessage.split(" /");
+        String[] untrimmedWords = this.extendedQuery.split(" /");
         String[] words = Arrays.stream(untrimmedWords)
                 .map(s -> s == null ? null : s.trim())
                 .toArray(String[]::new);
