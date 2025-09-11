@@ -1,11 +1,13 @@
 package james;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Parser {
     private static boolean canExit;
+
     /**
      * Checks if the mark or unmark query is valid.
      *
@@ -13,15 +15,24 @@ public class Parser {
      * @return Boolean based on query validity.
      */
     public static boolean isValidMarkQuery(String[] words, int size) {
-        return (words.length == 2)
-                &&
-                (words[0].equalsIgnoreCase("mark") || words[0].equalsIgnoreCase("unmark"))
-                &&
-                (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
-                &&
-                (Integer.parseInt(words[1]) <= size)
-                &&
-                (!words[1].equals("0"));
+        if (words.length == 1 || words.length == 0) {
+            return false;
+        }
+        String[] taskStringNumbers = words[1].split(" ");
+        for (String index: taskStringNumbers) {
+            if (!index.matches("^[+-]?\\d+$")) {
+                return false;
+            }
+
+            if (!(Integer.parseInt(index) <= size)) {
+                return false;
+            }
+
+            if (words[1].equals("0")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -295,9 +306,13 @@ public class Parser {
      * Handles the "mark"/"unmark" command by updating the task's status.
      */
     private static JamesResponse handleMark(String query, TaskList tasks) {
-        Task editedTask = tasks.markTask(query);
-        String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
-        return new JamesResponse(action + editedTask);
+        ArrayList<Task> editedTasks = tasks.markTasks(query);
+        StringBuilder response = new StringBuilder();
+        for (Task t : editedTasks) {
+            String action = t.getStatus() ? "marked:\n" : "unmarked:\n";
+            response.append(action).append(t).append("\n");
+        }
+        return new JamesResponse(response.toString());
     }
 
     /**

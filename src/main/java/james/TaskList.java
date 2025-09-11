@@ -89,6 +89,31 @@ public class TaskList {
     }
 
     /**
+     * Checks or unchecks task based on input.
+     *
+     * @param query String containing the scanned input.
+     * @return James.Task Updated James.Task.
+     */
+    public ArrayList<Task> markTasks(String query) {
+        String[] words = query.split(" ", 2);
+        String[] taskStringNumbers = words[1].split(" ");
+        String command = words[0].toLowerCase();
+        ArrayList<Task> modifiedTasks = new ArrayList<Task>();
+        for (String index : taskStringNumbers) {
+            int taskNumber = Integer.parseInt(index) - 1;
+            if (command.equals("mark")) {
+                tasks.get(taskNumber).finishTask();
+            }
+
+            if (command.equals("unmark")) {
+                tasks.get(taskNumber).undoTask();
+            }
+            modifiedTasks.add(tasks.get(taskNumber));
+        }
+        return modifiedTasks;
+    }
+
+    /**
      * Deletes a task based on the input query string.
      * Assumes the query is in the format "delete <Index>".
      *
