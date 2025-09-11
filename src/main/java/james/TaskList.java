@@ -119,8 +119,8 @@ public class TaskList {
         ArrayList<Task> deletedTasks = new ArrayList<Task>();
         for (String index : taskStringNumbers) {
             int taskNumber = Integer.parseInt(index) - 1;
-            deletedTasks.add(this.tasks.remove(taskNumber));
             this.size--;
+            deletedTasks.add(this.tasks.remove(taskNumber));
         }
         return deletedTasks;
     }

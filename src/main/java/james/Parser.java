@@ -303,7 +303,7 @@ public class Parser {
      * Handles the "delete" command by removing a task from the task list.
      */
     private static JamesResponse handleDelete(String query, TaskList tasks) {
-        ArrayList<Task> deletedTasks = tasks.markTasks(query);
+        ArrayList<Task> deletedTasks = tasks.deleteTasks(query);
         StringBuilder response = new StringBuilder();
         for (Task t : deletedTasks) {
             response.append("deleted:\n").append(t).append("\n");
