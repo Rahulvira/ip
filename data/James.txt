@@ -1,6 +1,6 @@
 D|1|deadline finish homework /by sunday
 E|1|event Sports day /from saturday 5pm /to 7pm
-T|0|todo clear the shelf
+T|1|todo clear the shelf
 T|1|todo clean my room
 T|1|todo finish homework
 D|1|deadline finish task /by 2/3/2025 0900

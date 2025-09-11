@@ -39,84 +39,153 @@ public class Parser {
     }
 
     /**
-     * Checks the validity of a query and throws a JamesException if the query is malformed.
+     * Parses the input query, validates it, and returns the type of command it represents.
      *
-     * @param query The full input query string.
+     * This method is the single entry point for both command identification and query validation.
+     * It ensures the query adheres to the expected format and throws a {@link JamesException}
+     * if the input is malformed or incomplete.
+     *
+     * @param query The full input query string provided by the user.
      * @param size  The current number of tasks in the task list.
+     * @return A lowercase string representing the command type (e.g., "todo", "event", "mark").
      * @throws JamesException if the query is invalid or incomplete.
      */
-    public static void checkQuery(String query, int size) throws JamesException {
-        String[] splitQuery = query.split(" ", 2);
-        String firstWord = splitQuery[0];
-        if (firstWord.equalsIgnoreCase("todo")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("You forgot the task buddy!");
-            }
-        } else if (firstWord.equalsIgnoreCase("event")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("You forgot the task buddy!");
-            } else if (splitQuery[1].split(" /").length < 3) {
-                throw new JamesException("event query incomplete!");
-            }
-        } else if (firstWord.equalsIgnoreCase("deadline")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("You forgot the task buddy!");
-            } else if (splitQuery[1].split(" /").length < 2) {
-                throw new JamesException("deadline query incomplete!");
-            }
-        } else if (firstWord.equalsIgnoreCase("list")) {
-            if (splitQuery.length > 1) {
-                throw new JamesException("I can only reply if you just say 'list', sorry! ");
-            }
-        } else if (firstWord.equalsIgnoreCase("find")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("please specify what I should find ");
-            }
-        } else if (firstWord.equalsIgnoreCase("delete")) {
-            if (splitQuery.length == 1) {
-                throw new JamesException("Please specify which task to delete!");
-            }
-        } else if (firstWord.equalsIgnoreCase("mark") || firstWord.equalsIgnoreCase("unmark")) {
-            if (!isValidMarkQuery(splitQuery, size)) {
-                throw new JamesException("I can only mark the tasks we have, sorry!");
-            }
-        } else if (firstWord.equalsIgnoreCase("bye")) {
-            // do nothing
-        } else {
-            throw new JamesException("Sorry!, I am not smart enough for this yet!");
+    public static String parse(String query, int size) throws JamesException {
+        String[] splitQuery = query.trim().split(" ", 2);
+        String command = splitQuery[0].toLowerCase();
+
+        switch (command) {
+            case "bye":
+                return "bye";
+
+            case "list":
+                validateList(splitQuery);
+                return "list";
+
+            case "find":
+                validateFind(splitQuery);
+                return "find";
+
+            case "todo":
+                validateTodo(splitQuery);
+                return "todo";
+
+            case "event":
+                validateEvent(splitQuery);
+                return "event";
+
+            case "deadline":
+                validateDeadline(splitQuery);
+                return "deadline";
+
+            case "delete":
+                validateDelete(splitQuery, size);
+                return "delete";
+
+            case "mark":
+            case "unmark":
+                validateMark(splitQuery, size);
+                return "mark";
+
+            default:
+                throw new JamesException("Sorry! I am not smart enough for this yet!");
         }
     }
 
     /**
-     * Parses the input query and returns the type of command it represents.
+     * Validates a "todo" command query.
      *
-     * @param query The full input query string.
-     * @param size  The current number of tasks in the task list.
-     * @return A string representing the command type (e.g., "todo", "event", "mark").
-     * @throws JamesException if the query is invalid.
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no description is provided.
      */
-    public static String parse(String query, int size) throws JamesException {
-        Parser.checkQuery(query, size);
-        if (query.equalsIgnoreCase("bye")) {
-            return "bye";
-        } else if (query.equalsIgnoreCase("list")) {
-            return "list";
-        } else if (query.startsWith("find")) {
-            return "find";
-        } else if (Parser.isValidMarkQuery(query.split(" "), size)) {
-            return "mark";
-        } else if (Parser.isValidDeleteQuery(query.split(" "), size)) {
-            return "delete";
-        } else {
-            if (query.startsWith("todo")) {
-                return "todo";
-            } else if (query.startsWith("event")) {
-                return "event";
-            } else if (query.startsWith("deadline")) {
-                return "deadline";
-            } else {
-                return "invalid";
-            }
+    private static void validateTodo(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("You forgot the task buddy!");
+        }
+    }
+
+    /**
+     * Validates an "event" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no description is provided or if the event details
+     *                        (description, /at, and date/time) are incomplete.
+     */
+    private static void validateEvent(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("You forgot the task buddy!");
+        }
+        if (splitQuery[1].split(" /").length < 3) {
+            throw new JamesException("Event query incomplete!");
+        }
+    }
+
+    /**
+     * Validates a "deadline" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no description is provided or if the deadline details
+     *                        (description and /by) are incomplete.
+     */
+    private static void validateDeadline(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("You forgot the task buddy!");
+        }
+        if (splitQuery[1].split(" /").length < 2) {
+            throw new JamesException("Deadline query incomplete!");
+        }
+    }
+
+    /**
+     * Validates a "list" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if additional arguments are provided with the "list" command.
+     */
+    private static void validateList(String[] splitQuery) throws JamesException {
+        if (splitQuery.length > 1) {
+            throw new JamesException("I can only reply if you just say 'list', sorry!");
+        }
+    }
+
+    /**
+     * Validates a "find" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @throws JamesException if no keyword is provided to search for.
+     */
+    private static void validateFind(String[] splitQuery) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("Please specify what I should find");
+        }
+    }
+
+    /**
+     * Validates a "delete" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @param size       The current number of tasks in the task list.
+     * @throws JamesException if no task index is provided or if the index is invalid.
+     */
+    private static void validateDelete(String[] splitQuery, int size) throws JamesException {
+        if (splitQuery.length == 1) {
+            throw new JamesException("Please specify which task to delete!");
+        }
+        if (!Parser.isValidDeleteQuery(splitQuery, size)) {
+            throw new JamesException("Invalid delete query!");
+        }
+    }
+
+    /**
+     * Validates a "mark" or "unmark" command query.
+     *
+     * @param splitQuery The query split into command and arguments.
+     * @param size       The current number of tasks in the task list.
+     * @throws JamesException if the index provided does not match a valid task.
+     */
+    private static void validateMark(String[] splitQuery, int size) throws JamesException {
+        if (!Parser.isValidMarkQuery(splitQuery, size)) {
+            throw new JamesException("I can only mark the tasks we have, sorry!");
         }
     }
 
@@ -188,7 +257,7 @@ public class Parser {
             tasks.add(newTask);
             return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
         } else {
-            return new JamesResponse("invalid");
+            return new JamesResponse("invalid command");
         }
     }
 }
