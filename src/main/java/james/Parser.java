@@ -1,7 +1,6 @@
 package james;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -14,7 +13,7 @@ public class Parser {
      * @param words Array containing the parsed elements of scanned input.
      * @return Boolean based on query validity.
      */
-    public static boolean isValidMarkQuery(String[] words, int size) {
+    public static boolean isValidMarkOrDeleteQuery(String[] words, int size) {
         if (words.length == 1 || words.length == 0) {
             return false;
         }
@@ -33,24 +32,6 @@ public class Parser {
             }
         }
         return true;
-    }
-
-    /**
-     * Checks if the delete query is valid.
-     *
-     * @param words Array containing the parsed elements of scanned input.
-     * @return Boolean based on query validity.
-     */
-    public static boolean isValidDeleteQuery(String[] words, int size) {
-        return (words.length == 2)
-                &&
-                (words[0].equalsIgnoreCase("delete"))
-                &&
-                (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
-                &&
-                (Integer.parseInt(words[1]) <= size)
-                &&
-                (!words[1].equals("0"));
     }
 
     /**
@@ -186,7 +167,7 @@ public class Parser {
         if (splitQuery.length == 1) {
             throw new JamesException("Please specify which task to delete!");
         }
-        if (!Parser.isValidDeleteQuery(splitQuery, size)) {
+        if (!Parser.isValidMarkOrDeleteQuery(splitQuery, size)) {
             throw new JamesException("Invalid delete query!");
         }
     }
@@ -199,7 +180,10 @@ public class Parser {
      * @throws JamesException if the index provided does not match a valid task.
      */
     private static void validateMark(String[] splitQuery, int size) throws JamesException {
-        if (!Parser.isValidMarkQuery(splitQuery, size)) {
+        if (splitQuery.length == 1) {
+            throw new JamesException("Please specify which task to mark/unmark!");
+        }
+        if (!Parser.isValidMarkOrDeleteQuery(splitQuery, size)) {
             throw new JamesException("I can only mark the tasks we have, sorry!");
         }
     }
@@ -319,8 +303,12 @@ public class Parser {
      * Handles the "delete" command by removing a task from the task list.
      */
     private static JamesResponse handleDelete(String query, TaskList tasks) {
-        Task deletedTask = tasks.deleteTask(query);
-        return new JamesResponse("deleted: " + deletedTask);
+        ArrayList<Task> deletedTasks = tasks.markTasks(query);
+        StringBuilder response = new StringBuilder();
+        for (Task t : deletedTasks) {
+            response.append("deleted:\n").append(t).append("\n");
+        }
+        return new JamesResponse(response.toString());
     }
 
     /**

@@ -113,6 +113,18 @@ public class TaskList {
         return modifiedTasks;
     }
 
+    public ArrayList<Task> deleteTasks(String query) {
+        String[] words = query.split(" ", 2);
+        String[] taskStringNumbers = words[1].split(" ");
+        ArrayList<Task> deletedTasks = new ArrayList<Task>();
+        for (String index : taskStringNumbers) {
+            int taskNumber = Integer.parseInt(index) - 1;
+            deletedTasks.add(this.tasks.remove(taskNumber));
+            this.size--;
+        }
+        return deletedTasks;
+    }
+
     /**
      * Deletes a task based on the input query string.
      * Assumes the query is in the format "delete <Index>".
