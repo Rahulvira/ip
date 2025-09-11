@@ -21,7 +21,9 @@ public class Parser {
                 &&
                 (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
                 &&
-                (Integer.parseInt(words[1]) <= size);
+                (Integer.parseInt(words[1]) <= size)
+                &&
+                (!words[1].equals("0"));
     }
 
     /**
@@ -37,7 +39,9 @@ public class Parser {
                 &&
                 (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
                 &&
-                (Integer.parseInt(words[1]) <= size);
+                (Integer.parseInt(words[1]) <= size)
+                &&
+                (!words[1].equals("0"));
     }
 
     /**
@@ -138,6 +142,7 @@ public class Parser {
      */
     public static Task markTask(String[] words, TaskList tasks) {
         int taskNo = Integer.parseInt(words[1].trim()) - 1;
+        assert taskNo != 0 : "Cannot mark 0th task";
         if (words[0].equalsIgnoreCase("mark")) {
             System.out.println("marked the following task!");
             //tasks[taskNo].finishTask();
@@ -191,6 +196,11 @@ public class Parser {
      * @param db     The database handler for storing tasks.
      */
     public static JamesResponse execute(String type, String query, TaskList tasks, Ui ui, Database db) {
+        assert type != null : "command should be of a specified type";
+        assert query != null : "cannot execute an empty input";
+        assert ui != null : "ui object cannot be null";
+        assert db != null : "db cannot be null";
+        assert tasks != null : "cannot have have a null TaskList object";
         ArrayList<Boolean> trueFlags = new ArrayList<>(Collections.nCopies(tasks.getSize(), true));
         if (type.equals("bye")) {
             ui.showBye();
@@ -208,9 +218,9 @@ public class Parser {
             ArrayList<Boolean> flags = ui.displayFilteredList(tasks, query);
             return new JamesResponse(formatListOutput(tasks, flags));
         } else if (type.equals("mark")) {
-            Task editedTask = Parser.markTask(query.split(" "), tasks);
-            String action = editedTask.getStatus() ? "unmarked:\n" : "marked:\n";
-            return new JamesResponse("marked: " + editedTask.toString());
+            Task editedTask = tasks.markTask(query);
+            String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
+            return new JamesResponse(action + editedTask.toString());
         } else if (type.equals("delete")) {
             Task deletedTask = tasks.deleteTask(query);
             return new JamesResponse("deleted: " + deletedTask.toString());
@@ -227,6 +237,7 @@ public class Parser {
             tasks.add(newTask);
             return new JamesResponse(formatTaskOutput(newTask, tasks.getSize()));
         } else {
+            assert false: "unreachable code, bug in parser";
             return new JamesResponse("invalid");
         }
     }
