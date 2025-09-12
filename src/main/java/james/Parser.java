@@ -6,40 +6,32 @@ import java.util.Collections;
 
 public class Parser {
     private static boolean canExit;
+
     /**
      * Checks if the mark or unmark query is valid.
      *
      * @param words Array containing the parsed elements of scanned input.
      * @return Boolean based on query validity.
      */
-    public static boolean isValidMarkQuery(String[] words, int size) {
-        return (words.length == 2)
-                &&
-                (words[0].equalsIgnoreCase("mark") || words[0].equalsIgnoreCase("unmark"))
-                &&
-                (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
-                &&
-                (Integer.parseInt(words[1]) <= size)
-                &&
-                (!words[1].equals("0"));
-    }
+    public static boolean isValidMarkOrDeleteQuery(String[] words, int size) {
+        if (words.length == 1 || words.length == 0) {
+            return false;
+        }
+        String[] taskStringNumbers = words[1].split(" ");
+        for (String index: taskStringNumbers) {
+            if (!index.matches("^[+-]?\\d+$")) {
+                return false;
+            }
 
-    /**
-     * Checks if the delete query is valid.
-     *
-     * @param words Array containing the parsed elements of scanned input.
-     * @return Boolean based on query validity.
-     */
-    public static boolean isValidDeleteQuery(String[] words, int size) {
-        return (words.length == 2)
-                &&
-                (words[0].equalsIgnoreCase("delete"))
-                &&
-                (words[1].matches("^[+-]?\\d+$")) // to check if it is an integer
-                &&
-                (Integer.parseInt(words[1]) <= size)
-                &&
-                (!words[1].equals("0"));
+            if (!(Integer.parseInt(index) <= size)) {
+                return false;
+            }
+
+            if (words[1].equals("0")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -175,7 +167,7 @@ public class Parser {
         if (splitQuery.length == 1) {
             throw new JamesException("Please specify which task to delete!");
         }
-        if (!Parser.isValidDeleteQuery(splitQuery, size)) {
+        if (!Parser.isValidMarkOrDeleteQuery(splitQuery, size)) {
             throw new JamesException("Invalid delete query!");
         }
     }
@@ -188,7 +180,10 @@ public class Parser {
      * @throws JamesException if the index provided does not match a valid task.
      */
     private static void validateMark(String[] splitQuery, int size) throws JamesException {
-        if (!Parser.isValidMarkQuery(splitQuery, size)) {
+        if (splitQuery.length == 1) {
+            throw new JamesException("Please specify which task to mark/unmark!");
+        }
+        if (!Parser.isValidMarkOrDeleteQuery(splitQuery, size)) {
             throw new JamesException("I can only mark the tasks we have, sorry!");
         }
     }
@@ -260,7 +255,7 @@ public class Parser {
     }
 
     /**
-     * Handles the "bye" command by saving tasks, showing a farewell, and preparing exit.
+     * Handles the "bye" command by saving tasks, responding with a "bye", and preparing exit.
      */
     private static JamesResponse handleBye(TaskList tasks, Ui ui, Database db) {
         ui.showBye();
@@ -292,20 +287,28 @@ public class Parser {
     }
 
     /**
-     * Handles the "mark"/"unmark" command by updating the task's status.
+     * Handles the "mark"/"unmark" command by updating the task's statuses.
      */
     private static JamesResponse handleMark(String query, TaskList tasks) {
-        Task editedTask = tasks.markTask(query);
-        String action = editedTask.getStatus() ? "marked:\n" : "unmarked:\n";
-        return new JamesResponse(action + editedTask);
+        ArrayList<Task> editedTasks = tasks.markTasks(query);
+        StringBuilder response = new StringBuilder();
+        for (Task t : editedTasks) {
+            String action = t.getStatus() ? "marked:\n" : "unmarked:\n";
+            response.append(action).append(t).append("\n");
+        }
+        return new JamesResponse(response.toString());
     }
 
     /**
-     * Handles the "delete" command by removing a task from the task list.
+     * Handles the "delete" command removing task/tasks from the task list.
      */
     private static JamesResponse handleDelete(String query, TaskList tasks) {
-        Task deletedTask = tasks.deleteTask(query);
-        return new JamesResponse("deleted: " + deletedTask);
+        ArrayList<Task> deletedTasks = tasks.deleteTasks(query);
+        StringBuilder response = new StringBuilder();
+        for (Task t : deletedTasks) {
+            response.append("deleted:\n").append(t).append("\n");
+        }
+        return new JamesResponse(response.toString());
     }
 
     /**
