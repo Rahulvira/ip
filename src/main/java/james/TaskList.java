@@ -67,43 +67,53 @@ public class TaskList {
             count++;
         }
     }
+
     /**
-     * Checks or unchecks task based on input.
+     * Parses user command to mark or unmark tasks based on user input.
+     * Assumes the input is in the format {@code "mark x y z ..."} or {@code "unmark x y z ..."},
+     * where {@code x}, {@code y}, {@code z}, etc. are integer indexes referring to tasks in the list.
      *
-     * @param query String containing the scanned input.
-     * @return James.Task Updated James.Task.
+     * @param query the raw input string from the user.
+     * @return an {@code ArrayList<Task>} containing the updated task states after applying the mark/unmark operation.
      */
-    public Task markTask(String query) {
-        String[] words = query.split(" ");
-        int taskNo = Integer.parseInt(words[1].trim()) - 1;
-        if (words[0].equalsIgnoreCase("mark")) {
-            System.out.println("marked the following task!");
-            //tasks[taskNo].finishTask();
-            tasks.get(taskNo).finishTask();
-        } else {
-            System.out.println("unmarked the following task!");
-            //tasks[taskNo].undoTask();
-            tasks.get(taskNo).undoTask();
+    public ArrayList<Task> markTasks(String query) {
+        String[] words = query.split(" ", 2);
+        String[] taskStringNumbers = words[1].split(" ");
+        String command = words[0].toLowerCase();
+        ArrayList<Task> modifiedTasks = new ArrayList<Task>();
+        for (String index : taskStringNumbers) {
+            int taskNumber = Integer.parseInt(index) - 1;
+            if (command.equals("mark")) {
+                tasks.get(taskNumber).finishTask();
+            }
+
+            if (command.equals("unmark")) {
+                tasks.get(taskNumber).undoTask();
+            }
+            modifiedTasks.add(tasks.get(taskNumber));
         }
-        return tasks.get(taskNo);
+        return modifiedTasks;
     }
 
     /**
-     * Deletes a task based on the input query string.
-     * Assumes the query is in the format "delete <Index>".
+     * Deletes tasks based on the input query string.
+     * Assumes the user input is a command in the format {@code "delete x y z ..."},
+     * where {@code x}, {@code y}, {@code z}, etc. are integer indexes referring to items to be deleted.
      *
      * @param query String containing the delete command and task number.
-     * @return Task object that was removed.
+     * @return ArrayList<Task> Deleted tasks in a list.
      */
-    public Task deleteTask(String query) {
-        String[] words = query.split(" ");
-        int taskNo = Integer.parseInt(words[1].trim()) - 1;
-        assert taskNo != 0 : "Cannot delete 0th task";
-        System.out.println("deleted the following task!");
-        this.size--;
-        return this.tasks.remove(taskNo);
+    public ArrayList<Task> deleteTasks(String query) {
+        String[] words = query.split(" ", 2);
+        String[] taskStringNumbers = words[1].split(" ");
+        ArrayList<Task> deletedTasks = new ArrayList<Task>();
+        for (String index : taskStringNumbers) {
+            int taskNumber = Integer.parseInt(index) - 1;
+            this.size--;
+            deletedTasks.add(this.tasks.remove(taskNumber));
+        }
+        return deletedTasks;
     }
-
 
     /**
      * Generates a list of boolean flags indicating which tasks contain a given search term.
