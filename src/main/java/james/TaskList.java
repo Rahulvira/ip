@@ -89,10 +89,12 @@ public class TaskList {
     }
 
     /**
-     * Checks or unchecks task based on input.
+     * Parses user command to mark or unmark tasks based on user input.
+     * Assumes the input is in the format {@code "mark x y z ..."} or {@code "unmark x y z ..."},
+     * where {@code x}, {@code y}, {@code z}, etc. are integer indexes referring to tasks in the list.
      *
-     * @param query String containing the scanned input.
-     * @return James.Task Updated James.Task.
+     * @param query the raw input string from the user.
+     * @return an {@code ArrayList<Task>} containing the updated task states after applying the mark/unmark operation.
      */
     public ArrayList<Task> markTasks(String query) {
         String[] words = query.split(" ", 2);
@@ -113,6 +115,14 @@ public class TaskList {
         return modifiedTasks;
     }
 
+    /**
+     * Deletes tasks based on the input query string.
+     * Assumes the user input is a command in the format {@code "delete x y z ..."},
+     * where {@code x}, {@code y}, {@code z}, etc. are integer indexes referring to items to be deleted.
+     *
+     * @param query String containing the delete command and task number.
+     * @return ArrayList<Task> Deleted tasks in a list.
+     */
     public ArrayList<Task> deleteTasks(String query) {
         String[] words = query.split(" ", 2);
         String[] taskStringNumbers = words[1].split(" ");

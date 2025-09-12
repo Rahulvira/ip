@@ -255,7 +255,7 @@ public class Parser {
     }
 
     /**
-     * Handles the "bye" command by saving tasks, showing a farewell, and preparing exit.
+     * Handles the "bye" command by saving tasks, responding with a "bye", and preparing exit.
      */
     private static JamesResponse handleBye(TaskList tasks, Ui ui, Database db) {
         ui.showBye();
@@ -287,7 +287,7 @@ public class Parser {
     }
 
     /**
-     * Handles the "mark"/"unmark" command by updating the task's status.
+     * Handles the "mark"/"unmark" command by updating the task's statuses.
      */
     private static JamesResponse handleMark(String query, TaskList tasks) {
         ArrayList<Task> editedTasks = tasks.markTasks(query);
@@ -300,7 +300,7 @@ public class Parser {
     }
 
     /**
-     * Handles the "delete" command by removing a task from the task list.
+     * Handles the "delete" command removing task/tasks from the task list.
      */
     private static JamesResponse handleDelete(String query, TaskList tasks) {
         ArrayList<Task> deletedTasks = tasks.deleteTasks(query);
