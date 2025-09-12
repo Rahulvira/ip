@@ -67,26 +67,6 @@ public class TaskList {
             count++;
         }
     }
-    /**
-     * Checks or unchecks task based on input.
-     *
-     * @param query String containing the scanned input.
-     * @return James.Task Updated James.Task.
-     */
-    public Task markTask(String query) {
-        String[] words = query.split(" ");
-        int taskNo = Integer.parseInt(words[1].trim()) - 1;
-        if (words[0].equalsIgnoreCase("mark")) {
-            System.out.println("marked the following task!");
-            //tasks[taskNo].finishTask();
-            tasks.get(taskNo).finishTask();
-        } else {
-            System.out.println("unmarked the following task!");
-            //tasks[taskNo].undoTask();
-            tasks.get(taskNo).undoTask();
-        }
-        return tasks.get(taskNo);
-    }
 
     /**
      * Parses user command to mark or unmark tasks based on user input.
@@ -134,23 +114,6 @@ public class TaskList {
         }
         return deletedTasks;
     }
-
-    /**
-     * Deletes a task based on the input query string.
-     * Assumes the query is in the format "delete <Index>".
-     *
-     * @param query String containing the delete command and task number.
-     * @return Task object that was removed.
-     */
-    public Task deleteTask(String query) {
-        String[] words = query.split(" ");
-        int taskNo = Integer.parseInt(words[1].trim()) - 1;
-        assert taskNo != 0 : "Cannot delete 0th task";
-        System.out.println("deleted the following task!");
-        this.size--;
-        return this.tasks.remove(taskNo);
-    }
-
 
     /**
      * Generates a list of boolean flags indicating which tasks contain a given search term.
