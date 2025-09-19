@@ -6,6 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Used chatgpt to implement junit tests
+ * to exhaustively test all possible aspects
+ * and implement more tests for James
+ */
+
 public class TodoTest {
     @Test
     void constructor_setsDescriptionCorrectly() {
