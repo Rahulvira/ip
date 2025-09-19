@@ -8,10 +8,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the {@link Ui} class.
- * Captures console output to verify printed messages.
- */
+
 class UiTest {
 
     private Ui ui;
@@ -36,18 +33,12 @@ class UiTest {
         return outputStream.toString().trim();
     }
 
-    /**
-     * Tests that showLine prints a divider line.
-     */
     @Test
     void testShowLine() {
         ui.showLine();
         assertTrue(getOutput().contains("--------------------------------------------------------------"));
     }
 
-    /**
-     * Tests that showWelcome prints the welcome message followed by a line.
-     */
     @Test
     void testShowWelcome() {
         ui.showWelcome();
@@ -57,18 +48,12 @@ class UiTest {
         assertTrue(output.contains("--------------------------------------------------------------"));
     }
 
-    /**
-     * Tests that showBye prints the farewell message.
-     */
     @Test
     void testShowBye() {
         ui.showBye();
         assertTrue(getOutput().contains("Bye, feel free to ask me anything anytime!"));
     }
 
-    /**
-     * Tests that displayList delegates printing to TaskList.displayTasks().
-     */
     @Test
     void testDisplayList() {
         TaskList taskList = new TaskList();
@@ -78,9 +63,6 @@ class UiTest {
         assertTrue(output.contains("finish report"));
     }
 
-    /**
-     * Tests that displayFilteredList prints only flagged tasks.
-     */
     @Test
     void testDisplayFilteredList() {
         TaskList taskList = new TaskList();
@@ -97,9 +79,6 @@ class UiTest {
         assertFalse(output.contains("read book"));
     }
 
-    /**
-     * Tests that readCommand reads a line from simulated user input.
-     */
     @Test
     void testReadCommand() {
         String simulatedInput = "hello world\n";
@@ -112,9 +91,6 @@ class UiTest {
         assertEquals("hello world", result);
     }
 
-    /**
-     * Tests that showError prints formatted error messages.
-     */
     @Test
     void testShowError() {
         ui.showError("Something went wrong");

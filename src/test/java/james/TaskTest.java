@@ -4,14 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the {@link Task} class and its utility methods.
- */
 class TaskTest {
 
-    /**
-     * Tests constructor initializes task description and default status correctly.
-     */
     @Test
     void testConstructorDefaultStatus() {
         Task task = new Task("read book");
@@ -19,9 +13,6 @@ class TaskTest {
         assertFalse(task.getStatus(), "Default status should be false (not done)");
     }
 
-    /**
-     * Tests constructor with explicit completion status.
-     */
     @Test
     void testConstructorWithStatus() {
         Task task = new Task("write essay", true);
@@ -29,9 +20,6 @@ class TaskTest {
         assertEquals("write essay", task.getTask());
     }
 
-    /**
-     * Tests finishTask marks a task as complete.
-     */
     @Test
     void testFinishTask() {
         Task task = new Task("do homework");
@@ -39,9 +27,6 @@ class TaskTest {
         assertTrue(task.getStatus());
     }
 
-    /**
-     * Tests undoTask marks a task as incomplete.
-     */
     @Test
     void testUndoTask() {
         Task task = new Task("clean room", true);
@@ -49,9 +34,6 @@ class TaskTest {
         assertFalse(task.getStatus());
     }
 
-    /**
-     * Tests toString outputs correct format depending on status.
-     */
     @Test
     void testToString() {
         Task undone = new Task("buy milk");
@@ -61,9 +43,6 @@ class TaskTest {
         assertEquals("[X] buy milk", done.toString());
     }
 
-    /**
-     * Tests stringToTask creates correct Todo object.
-     */
     @Test
     void testStringToTaskTodo() {
         Task task = Task.stringToTask("T|1|todo finish report");
@@ -72,9 +51,6 @@ class TaskTest {
         assertTrue(task.getTask().contains("finish report"));
     }
 
-    /**
-     * Tests stringToTask creates correct Deadline object.
-     */
     @Test
     void testStringToTaskDeadline() {
         Task task = Task.stringToTask("D|0|deadline submit report /by 12/9/2025 1800");
@@ -82,9 +58,6 @@ class TaskTest {
         assertFalse(task.getStatus());
     }
 
-    /**
-     * Tests stringToTask creates correct Event object.
-     */
     @Test
     void testStringToTaskEvent() {
         Task task = Task.stringToTask("E|1|event meeting /from 10/9/2025 1000 /to 10/9/2025 1200");
@@ -92,18 +65,12 @@ class TaskTest {
         assertTrue(task.getStatus());
     }
 
-    /**
-     * Tests stringToTask throws exception on malformed input.
-     */
     @Test
     void testStringToTaskInvalid() {
         assertThrows(IllegalArgumentException.class, () -> Task.stringToTask("invalid input"));
         assertThrows(IllegalArgumentException.class, () -> Task.stringToTask("X|1|something"));
     }
 
-    /**
-     * Tests taskToString converts Todo correctly.
-     */
     @Test
     void testTaskToStringTodo() {
         Todo todo = new Todo("todo finish report", true);
@@ -111,9 +78,6 @@ class TaskTest {
         assertEquals("T|1|todo finish report", result);
     }
 
-    /**
-     * Tests taskToString converts Deadline correctly.
-     */
     @Test
     void testTaskToStringDeadline() {
         Deadline deadline = new Deadline("deadline project /by 12/9/2025 1800", false);
@@ -121,9 +85,6 @@ class TaskTest {
         assertEquals("D|0|deadline project /by 12/9/2025 1800", result);
     }
 
-    /**
-     * Tests taskToString converts Event correctly.
-     */
     @Test
     void testTaskToStringEvent() {
         Event event = new Event("event workshop /from 12/9/2025 1000 /to 12/9/2025 1200", true);
@@ -131,9 +92,6 @@ class TaskTest {
         assertEquals("E|1|event workshop /from 12/9/2025 1000 /to 12/9/2025 1200", result);
     }
 
-    /**
-     * Tests parseDateTime with valid date only input.
-     */
     @Test
     void testParseDateOnly() {
         Task task = new Task("dummy");
@@ -142,9 +100,6 @@ class TaskTest {
         assertTrue(result.contains("SEPTEMBER"));
     }
 
-    /**
-     * Tests parseDateTime with valid date and time input.
-     */
     @Test
     void testParseDateTimeValid() {
         Task task = new Task("dummy");
@@ -154,9 +109,6 @@ class TaskTest {
         assertTrue(result.contains("6 00 pm"));
     }
 
-    /**
-     * Tests parseDateTime returns input if format invalid.
-     */
     @Test
     void testParseDateTimeInvalid() {
         Task task = new Task("dummy");
