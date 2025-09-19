@@ -1,13 +1,17 @@
-E|1|event Sports day /from saturday 5pm /to 7pm
-T|1|todo clear the shelf
+E|0|event Sports day /from saturday 5pm /to 7pm
+T|0|todo clear the shelf
 T|1|todo clean my room
 T|1|todo finish homework
 D|1|deadline finish task /by 2/3/2025 0900
 T|1|todo clean toilet
-E|1|event annual day /from friday 5pm /to 6pm
-D|1|deadline do task /by 2/9/2025 2359
+E|0|event annual day /from friday 5pm /to 6pm
+D|0|deadline do task /by 2/9/2025 2359
 E|0|event attend function /from 2/7/2025 1800 /to 5/7/2025 1800
 E|0|event attend function /from 2/7/2025 1800 /to 5/7/2025 1800
 T|0|todo finish tasks
 T|0|todo eat lunch
 T|0|todo attend tutorial
+T|0|todo Finish ip
+D|0|deadline submit quiz /by 2025-09-20 1800
+D|0|deadline submit quiz /by 20/9/2025 1800
+E|0|event project meeting /from 21/9/2025 1400 /to 21/9/2025 1600
