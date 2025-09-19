@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Used chatgpt to implement junit tests
+ * to exhaustively test all possible aspects
+ * and implement more tests for James
+ */
 
 class UiTest {
 
