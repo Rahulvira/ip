@@ -91,7 +91,6 @@ public class Task {
      */
     public static Task stringToTask (String s) throws IllegalArgumentException{
         String[] splitString = s.split("\\|",3);
-        //System.out.println(Arrays.toString(splitString));
         if (splitString.length != 3) {
             throw new IllegalArgumentException("Invalid Line!");
         }

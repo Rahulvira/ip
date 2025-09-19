@@ -56,14 +56,10 @@ public class Database {
             while ((task = r.readLine()) != null) {
                 if (task.isEmpty()) continue;
                 try {
-                    // convert from string to task
-                    // add task to tasks
                     Task t = Task.stringToTask(task);
                     tasks.add(t);
                 } catch (IllegalArgumentException e) {
-                    //System.out.println(e.getMessage());
-                } finally {
-                    //System.out.println("Loaded task!");
+                    // Ignore invalid task line and skip it
                 }
             }
         }

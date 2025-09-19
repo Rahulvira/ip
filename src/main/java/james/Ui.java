@@ -43,7 +43,6 @@ public class Ui {
      * @param tasks Array containing tasks.
      */
     public void displayList(TaskList tasks) {
-        //System.out.println(arr);
         tasks.displayTasks();
     }
 

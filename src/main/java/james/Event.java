@@ -69,7 +69,6 @@ public class Event extends Task{
      */
     public String getEventDetails() {
         String[] untrimmedQueryWords = this.extendedQuery.split(" /");
-        //System.out.println(Arrays.toString(words));
         String[] trimmedQueryWords = Arrays.stream(untrimmedQueryWords)
                 .map(s -> s == null ? null : s.trim())
                 .toArray(String[]::new);
