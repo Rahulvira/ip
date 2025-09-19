@@ -66,6 +66,6 @@ public class Ui {
      * @param err The error message to be shown.
      */
     public void showError(String err) {
-        System.out.println("DukeException: " +  err);
+        System.out.println("JamesException: " +  err);
     }
 }

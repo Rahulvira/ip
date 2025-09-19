@@ -95,6 +95,6 @@ class UiTest {
     void testShowError() {
         ui.showError("Something went wrong");
         String output = getOutput();
-        assertTrue(output.contains("DukeException: Something went wrong"));
+        assertTrue(output.contains("JamesException: Something went wrong"));
     }
 }
