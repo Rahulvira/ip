@@ -168,7 +168,7 @@ public class Parser {
             throw new JamesException("Please specify which task to delete!");
         }
         if (!Parser.isValidMarkOrDeleteQuery(splitQuery, size)) {
-            throw new JamesException("Invalid delete query!");
+            throw new JamesException("I can only delete the tasks we have!");
         }
     }
 
@@ -184,7 +184,7 @@ public class Parser {
             throw new JamesException("Please specify which task to mark/unmark!");
         }
         if (!Parser.isValidMarkOrDeleteQuery(splitQuery, size)) {
-            throw new JamesException("I can only mark the tasks we have, sorry!");
+            throw new JamesException("I can only mark/unmark the tasks we have, sorry!");
         }
     }
 
