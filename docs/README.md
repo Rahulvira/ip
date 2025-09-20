@@ -184,4 +184,4 @@ Expected Output:
 ```
 Bye, feel free to ask me anything anytime!
 ```
-
+You may alternately just close the application and all your tasks will be saved.
