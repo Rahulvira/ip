@@ -3,8 +3,7 @@
 ![img.png](Ui.png)
 
 James is a chatbot based on a movie theme that you can use to store,
-retrieve, mark or unmark tasks. You may store tasks of the type "deadline", "todo"
-or event
+retrieve, mark or unmark tasks. You may store tasks of the type "deadline", "event" or "todo".
 
 ## Quick Reference
 
@@ -184,4 +183,4 @@ Expected Output:
 ```
 Bye, feel free to ask me anything anytime!
 ```
-You may alternately just close the application and all your tasks will be saved.
+You may alternatively just close the application and all your tasks will still be saved.
